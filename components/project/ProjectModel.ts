@@ -1,3 +1,5 @@
+import { SanityImageSource } from "@sanity/image-url/lib/types/types";
+
 export enum ProjectCategory {
     ADVERTISEMENT = "Advertisement",
     WORKSHOP = "Workshop",
@@ -21,6 +23,20 @@ export interface Project extends BaseProject {
     thumbnail: string;
     description: string;
     images?: string[];
+}
+
+export interface SanityBaseProject {
+    title: string;
+    slug: string;
+    summary: string;
+    thumbnail: string;
+}
+
+export interface SanityFullProject extends SanityBaseProject {
+    categories: string[];
+    description: string;
+    images: string[];
+    videos: string[];
 }
 
 export interface ProjectImages {
