@@ -32,6 +32,10 @@ export interface SanityBaseProject {
     thumbnail: string;
 }
 
+export interface IndexedProject extends SanityBaseProject {
+    index: number;
+}
+
 export interface SanityFullProject extends SanityBaseProject {
     categories: string[];
     description: string;

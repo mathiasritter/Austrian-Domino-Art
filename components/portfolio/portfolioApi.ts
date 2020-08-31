@@ -1,59 +1,30 @@
-import fetch from "isomorphic-unfetch";
-import { Project, ProjectImages } from "../project/ProjectModel";
+import { IndexedProject } from "../project/ProjectModel";
+import { sanityClient } from "../../lib/sanity";
+import groq from "groq";
 
-const throwError = (response: Response, message: string) => {
-    throw new Error(`${response.status} ${response.statusText} ${message}`);
-};
-
-export const getProjectByNumber = async (
+const getProjectByIndex = async (
     baseUrl: string,
-    projectNumber: number
-): Promise<Project> => {
-    const response = await fetch(
-        baseUrl + "/api/portfolio/number/" + projectNumber
+    index: number
+): Promise<IndexedProject> => {
+    const projectResponse = await sanityClient.fetch(
+        groq`
+        *[_type == "portfolio"][0] {
+          "project": projects[$index]-> {
+            title,
+            "slug": slug.current,
+            summary,
+            thumbnail
+          }
+        }
+    `,
+        { index }
     );
-    if (!response.ok) {
-        throwError(response, `failed to fetch project number ${projectNumber}`);
-    }
-    const project = await response.json();
-    return project;
-};
+    const project = projectResponse.project;
 
-export const getProjectBySlug = async (
-    baseUrl: string,
-    slug: string
-): Promise<Project> => {
-    const response = await fetch(baseUrl + "/api/portfolio/slug/" + slug);
-    if (!response.ok) {
-        throwError(response, `failed to fetch project with slug ${slug}`);
-    }
-    const project = await response.json();
-    return project;
-};
-
-export const getProjectImages = async (
-    baseUrl: string,
-    slug: string
-): Promise<ProjectImages> => {
-    const response = await fetch(baseUrl + "/api/portfolio/images/" + slug);
-    if (!response.ok) {
-        throwError(
-            response,
-            `failed to fetch images for project with slug ${slug}`
-        );
-    }
-    const images = (await response.json()) as string[];
     return {
-        slug,
-        images,
+        index,
+        ...project,
     };
 };
 
-export const getTotal = async (baseUrl: string): Promise<number> => {
-    const response = await fetch("/api/portfolio/count");
-    if (!response.ok) {
-        throwError(response, `failed to fetch project count`);
-    }
-    const count = (await response.json()).count;
-    return count;
-};
+export { getProjectByIndex };
