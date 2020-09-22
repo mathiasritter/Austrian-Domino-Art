@@ -11,6 +11,7 @@ import BlockContent from "@sanity/block-content-to-react";
 import { Theme } from "../../theme/theme";
 import { PropsWithStyles } from "../../theme/styleTypes";
 import { CardContentEqualPadding } from "../common/CustomCard";
+import { serializers } from "../../lib/sanity";
 
 interface ProjectDescriptionProps {
     categories: string[];
@@ -73,7 +74,10 @@ const ProjectDescription = withStyles(projectDescriptionStyles)(
                         variant="body1"
                         component="div"
                     >
-                        <BlockContent blocks={description} />
+                        <BlockContent
+                            blocks={description}
+                            serializers={serializers}
+                        />
                     </Typography>
                 </CardContentEqualPadding>
             </Card>

@@ -19,4 +19,22 @@ const urlFor = (source: SanityImageSource) => {
     return builder.image(source);
 };
 
-export { sanityClient, urlFor };
+const serializers = {
+    marks: {
+        internalLink: ({ mark, children }): JSX.Element => {
+            const { slug = {} } = mark;
+            const href = `/${slug.current}`;
+            return <a href={href}>{children}</a>;
+        },
+        link: ({ mark, children }): JSX.Element => {
+            const { href } = mark;
+            return (
+                <a href={href} target="_blank" rel="noreferrer noopener">
+                    {children}
+                </a>
+            );
+        },
+    },
+};
+
+export { sanityClient, urlFor, serializers };
