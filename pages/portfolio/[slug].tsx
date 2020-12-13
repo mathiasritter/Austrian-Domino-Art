@@ -16,11 +16,11 @@ import { ProjectImageList } from "../../components/project/ProjectImageList";
 import { ProjectTitle } from "../../components/project/ProjectTitle";
 import groq from "groq";
 import { sanityClient, urlFor } from "../../lib/sanity";
-import { SanityFullProject } from "../../components/project/ProjectModel";
+import { FullProject } from "../../components/project/ProjectModel";
 import NotFound from "../404";
 
 interface Props {
-    project: SanityFullProject;
+    project: FullProject;
 }
 
 const Portfolio: NextPage<Props, Props> = ({ project }: Props) => {
@@ -34,7 +34,7 @@ const Portfolio: NextPage<Props, Props> = ({ project }: Props) => {
         summary,
         thumbnail,
         images,
-        videos,
+        videos = [],
         description,
         categories,
     } = project;

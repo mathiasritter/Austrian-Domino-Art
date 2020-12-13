@@ -1,5 +1,5 @@
 import { getProjectByIndex } from "./portfolioApi";
-import { IndexedProject, SanityBaseProject } from "../project/ProjectModel";
+import { IndexedProject, BaseProject } from "../project/ProjectModel";
 import {
     Action,
     ActionReducerMapBuilder,
@@ -17,14 +17,13 @@ interface ErrorAction extends Action<string> {
 
 const fetchProject = createAsyncThunk(
     "portfolio/fetchProject",
-    ({ baseUrl, index }: { baseUrl: string; index: number }) =>
-        getProjectByIndex(baseUrl, index)
+    (index: number) => getProjectByIndex(index)
 );
 
 interface PortfolioState {
     page: number;
     total: number;
-    projects: SanityBaseProject[];
+    projects: BaseProject[];
 }
 
 const initialPortfolioState: PortfolioState = {
@@ -64,7 +63,7 @@ const portfolioSlice = createSlice({
 
         setProjects: (
             state: Draft<PortfolioState>,
-            action: PayloadAction<SanityBaseProject[]>
+            action: PayloadAction<BaseProject[]>
         ) => {
             state.projects = action.payload;
         },
@@ -92,7 +91,6 @@ const portfolioSlice = createSlice({
 
 const { setPage, setTotal, setProjects } = portfolioSlice.actions;
 const portfolioReducer = portfolioSlice.reducer;
-
 
 export {
     initialPortfolioState,

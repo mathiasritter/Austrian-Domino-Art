@@ -92,7 +92,7 @@ const getStaticProps: GetStaticProps<InitialReduxStateProps> = async () => {
 
     const projectsResult = await sanityClient.fetch(groq`
         *[_type == "portfolio"][0] {
-          "projects": projects[0..8]-> {
+          "projects": projects[0..7]-> {
             title,
             "slug": slug.current,
             summary,

@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import Link from "next/link";
-import getBaseUrl from "../../lib/base-url";
 import {
     Box,
     Card,
@@ -94,13 +93,7 @@ const PortfolioCard = withStyles(projectCardStyles)(
 
         useEffect(() => {
             if (!project) {
-                const baseUrl = getBaseUrl();
-                dispatch(
-                    fetchProject({
-                        baseUrl,
-                        index: projectIndex,
-                    })
-                );
+                dispatch(fetchProject(projectIndex));
             }
         }, [project, projectIndex]);
 
