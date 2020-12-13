@@ -90,10 +90,12 @@ const getStaticProps: GetStaticProps<Props> = async ({
         { slug }
     );
 
-    if (project.slug) {
-        project.thumbnail = urlFor(project.thumbnail).url();
-        project.images = project.images.map((image) => urlFor(image).url());
+    if (!project.slug) {
+        return { notFound: true };
     }
+
+    project.thumbnail = urlFor(project.thumbnail).url();
+    project.images = project.images.map((image) => urlFor(image).url());
 
     return {
         props: { project },
@@ -113,7 +115,7 @@ const getStaticPaths: GetStaticPaths = async () => {
 
     return {
         paths,
-        fallback: "unstable_blocking",
+        fallback: "blocking",
     };
 };
 
