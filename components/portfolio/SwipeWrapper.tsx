@@ -40,6 +40,7 @@ const SwipeWrapper: React.FC<PropsWithChildren<SwipeProps>> = (
             onSwipeRight={handleSwipeRight}
             onSwipeMove={handleSwipeMove}
             tolerance={50}
+            innerRef={undefined}
         >
             {props.children}
         </Swipe>
