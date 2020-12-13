@@ -90,8 +90,10 @@ const getStaticProps: GetStaticProps<Props> = async ({
         { slug }
     );
 
-    project.thumbnail = urlFor(project.thumbnail).url();
-    project.images = project.images.map((image) => urlFor(image).url());
+    if (project.slug) {
+        project.thumbnail = urlFor(project.thumbnail).url();
+        project.images = project.images.map((image) => urlFor(image).url());
+    }
 
     return {
         props: { project },
