@@ -1,13 +1,8 @@
-import {
-    getProjectByNumber,
-    getProjectBySlug,
-    getProjectImages,
-} from "./portfolioApi";
-import { Project, ProjectImages } from "../project/ProjectModel";
+import { getProjectByIndex } from "./portfolioApi";
+import { IndexedProject, BaseProject } from "../project/ProjectModel";
 import {
     Action,
     ActionReducerMapBuilder,
-    AnyAction,
     createAsyncThunk,
     createSlice,
     Draft,
@@ -20,57 +15,21 @@ interface ErrorAction extends Action<string> {
     error: SerializedError;
 }
 
-const isProjectAction = (
-    action: AnyAction
-): action is PayloadAction<Project> => {
-    return [
-        fetchProjectByNumber.fulfilled.type,
-        fetchProjectBySlug.fulfilled.type,
-    ].includes(action.type);
-};
-
-const isRejectedAction = (action: AnyAction): action is ErrorAction => {
-    return [
-        fetchProjectByNumber.rejected.type,
-        fetchProjectBySlug.rejected.type,
-        fetchProjectImages.rejected.type,
-    ].includes(action.type);
-};
-
-const logRejection = (state: Draft<PortfolioState>, action: ErrorAction) => {
-    console.error(action.error);
-};
-
-const fetchProjectByNumber = createAsyncThunk(
-    "portfolio/fetchProjectByNumber",
-    ({ baseUrl, projectNumber }: { baseUrl: string; projectNumber: number }) =>
-        getProjectByNumber(baseUrl, projectNumber)
-);
-
-const fetchProjectBySlug = createAsyncThunk(
-    "portfolio/fetchProjectBySlug",
-    ({ baseUrl, slug }: { baseUrl: string; slug: string }) =>
-        getProjectBySlug(baseUrl, slug)
-);
-
-const fetchProjectImages = createAsyncThunk(
-    "portfolio/fetchProjectImages",
-    ({ baseUrl, slug }: { baseUrl: string; slug: string }) =>
-        getProjectImages(baseUrl, slug)
+const fetchProject = createAsyncThunk(
+    "portfolio/fetchProject",
+    (index: number) => getProjectByIndex(index)
 );
 
 interface PortfolioState {
     page: number;
     total: number;
-    projects: { [slug: string]: Project };
-    order: string[];
+    projects: BaseProject[];
 }
 
 const initialPortfolioState: PortfolioState = {
     page: 1,
     total: 0,
-    projects: {},
-    order: [],
+    projects: [],
 };
 
 const mergePortfolioStates = (
@@ -80,8 +39,7 @@ const mergePortfolioStates = (
     return {
         page: current.page,
         total: Math.max(preloaded.total, current.total),
-        projects: Object.assign({}, preloaded.projects, current.projects),
-        order: union(current.order, preloaded.order),
+        projects: union(preloaded.projects, current.projects),
     };
 };
 
@@ -105,37 +63,29 @@ const portfolioSlice = createSlice({
 
         setProjects: (
             state: Draft<PortfolioState>,
-            action: PayloadAction<Project[]>
+            action: PayloadAction<BaseProject[]>
         ) => {
-            const projects = action.payload;
-            for (const project of projects) {
-                state.projects[project.slug] = project;
-                state.order[project.number] = project.slug;
-            }
+            state.projects = action.payload;
         },
     },
     extraReducers: (builder: ActionReducerMapBuilder<PortfolioState>) => {
         builder.addCase(
-            fetchProjectImages.fulfilled,
+            fetchProject.fulfilled,
             (
                 state: Draft<PortfolioState>,
-                action: PayloadAction<ProjectImages>
+                action: PayloadAction<IndexedProject>
             ) => {
-                const { slug, images } = action.payload;
-                state.projects[slug].images = images;
+                const { index, ...project } = action.payload;
+                state.projects[index] = project;
             }
         );
 
-        builder.addMatcher(
-            isProjectAction,
-            (state: Draft<PortfolioState>, action: PayloadAction<Project>) => {
-                const project = action.payload;
-                state.projects[project.slug] = project;
-                state.order[project.number] = project.slug;
+        builder.addCase(
+            fetchProject.rejected,
+            (state: Draft<PortfolioState>, action: ErrorAction) => {
+                console.error(action.error);
             }
         );
-
-        builder.addMatcher(isRejectedAction, logRejection);
     },
 });
 
@@ -148,8 +98,6 @@ export {
     setPage,
     setTotal,
     setProjects,
-    fetchProjectImages,
-    fetchProjectBySlug,
-    fetchProjectByNumber,
+    fetchProject,
     mergePortfolioStates,
 };

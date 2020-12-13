@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
-import { fetchProjectByNumber } from "./portfolioSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import Link from "next/link";
-import getBaseUrl from "../../lib/base-url";
 import {
     Box,
     Card,
@@ -18,9 +16,11 @@ import { Theme } from "../../theme/theme";
 import { LazyPortfolioImage } from "./LazyPortfolioImage";
 import { PropsWithStyles } from "../../theme/styleTypes";
 import { Skeleton } from "@material-ui/lab";
+import { fetchProject } from "./portfolioSlice";
+import { urlFor } from "../../lib/sanity";
 
 interface Props {
-    projectNumber: number;
+    projectIndex: number;
 }
 
 const projectCardStyles = (theme: Theme) =>
@@ -81,27 +81,21 @@ const projectCardStyles = (theme: Theme) =>
     });
 
 const PortfolioCard = withStyles(projectCardStyles)(
-    (props: PropsWithStyles<Props, typeof projectCardStyles>) => {
-        const { projectNumber, classes } = props;
-
+    ({
+        projectIndex,
+        classes,
+    }: PropsWithStyles<Props, typeof projectCardStyles>) => {
         const project = useSelector(
-            (state: RootState) =>
-                state.portfolio.projects[state.portfolio.order[projectNumber]]
+            (state: RootState) => state.portfolio.projects[projectIndex]
         );
 
         const dispatch = useDispatch();
 
         useEffect(() => {
             if (!project) {
-                const baseUrl = getBaseUrl();
-                dispatch(
-                    fetchProjectByNumber({
-                        baseUrl,
-                        projectNumber,
-                    })
-                );
+                dispatch(fetchProject(projectIndex));
             }
-        }, [projectNumber, project]);
+        }, [project, projectIndex]);
 
         const atLeastSm = useMediaQuery((theme: Theme) =>
             theme.breakpoints.up("sm")
@@ -123,7 +117,11 @@ const PortfolioCard = withStyles(projectCardStyles)(
                 </Box>
                 <Box className={classes.bottomContainer}>
                     <LazyPortfolioImage
-                        src={project?.thumbnail}
+                        src={
+                            project
+                                ? urlFor(project.thumbnail).url()
+                                : undefined
+                        }
                         alt={`Thumbnail for ${project?.title}`}
                     />
                     <Typography

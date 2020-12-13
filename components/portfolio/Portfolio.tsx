@@ -20,7 +20,7 @@ const Portfolio: React.FC = () => {
     const projects = useMemo(() => {
         const projects = [];
         for (let i = minIndex; i < maxIndex; i++) {
-            projects.push(<PortfolioCard key={i} projectNumber={i} />);
+            projects.push(<PortfolioCard key={i} projectIndex={i} />);
         }
         return projects;
     }, [minIndex, maxIndex]);

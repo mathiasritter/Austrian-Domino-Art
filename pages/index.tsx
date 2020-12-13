@@ -11,9 +11,10 @@ import { SeoHead } from "../components/head/SeoHead";
 import { GetStaticProps, NextPage } from "next";
 import { initializeStore, InitialReduxStateProps } from "../store";
 import { setProjects, setTotal } from "../components/portfolio/portfolioSlice";
-import { projectCount, projectsByRange } from "../assets/projects";
 import { Theme } from "../theme/theme";
 import { PropsWithStylesAndChildren } from "../theme/styleTypes";
+import { sanityClient } from "../lib/sanity";
+import groq from "groq";
 
 const Index: NextPage = () => (
     <>
@@ -81,16 +82,32 @@ const GreySection = withStyles(greySectionStyles)(Section);
 const getStaticProps: GetStaticProps<InitialReduxStateProps> = async () => {
     const store = initializeStore();
 
-    const total = projectCount();
+    const totalResult = await sanityClient.fetch(groq`
+        *[_type == "portfolio"][0] {
+          "total": count(projects[])
+        }
+    `);
+    const total = totalResult.total;
     store.dispatch(setTotal(total));
 
-    const projects = projectsByRange(0, 8);
+    const projectsResult = await sanityClient.fetch(groq`
+        *[_type == "portfolio"][0] {
+          "projects": projects[0..7]-> {
+            title,
+            "slug": slug.current,
+            summary,
+            thumbnail
+          }
+        }
+    `);
+    const projects = projectsResult.projects;
     store.dispatch(setProjects(projects));
 
     return {
         props: {
             initialReduxState: store.getState(),
         },
+        revalidate: 10,
     };
 };
 

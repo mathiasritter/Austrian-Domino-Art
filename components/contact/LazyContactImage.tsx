@@ -1,6 +1,11 @@
 import { Theme } from "../../theme/theme";
 import { createStyles, withStyles } from "@material-ui/core";
-import { baseImageStyles, LazyImage } from "../common/LazyImage";
+import {
+    baseImageStyles,
+    LazyImage,
+    LazyImageProps,
+} from "../common/LazyImage";
+import React from "react";
 
 const lazyContactImageStyles = (theme: Theme) =>
     createStyles({
@@ -24,6 +29,8 @@ const lazyContactImageStyles = (theme: Theme) =>
         },
     });
 
-const LazyContactImage = withStyles(lazyContactImageStyles)(LazyImage);
+const LazyContactImage: React.ComponentType<LazyImageProps> = withStyles(
+    lazyContactImageStyles
+)(LazyImage);
 
 export { LazyContactImage };

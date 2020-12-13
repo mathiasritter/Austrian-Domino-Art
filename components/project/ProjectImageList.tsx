@@ -5,20 +5,6 @@ import { PropsWithStyles } from "../../theme/styleTypes";
 import { createDiv } from "../common/createDiv";
 import { LazyProjectImage } from "./LazyProjectImage";
 import { ProjectCarouselModal } from "./ProjectCarouselModal";
-import { Skeleton } from "@material-ui/lab";
-
-const imageListSkeletonStyles = (theme: Theme) =>
-    createStyles({
-        root: {
-            paddingBottom: "66.66%",
-        },
-    });
-
-const ImageListSkeleton = withStyles(
-    imageListSkeletonStyles
-)(({ classes }: PropsWithStyles) => (
-    <Skeleton variant="rect" className={classes.root} />
-));
 
 interface ProjectImageListProps {
     images: string[] | null;
@@ -46,10 +32,6 @@ const ProjectImageList = withStyles(imageListStyles)(
         title,
         classes,
     }: PropsWithStyles<ProjectImageListProps, typeof imageListStyles>) => {
-        if (!images) {
-            return <ImageListSkeleton />;
-        }
-
         const [open, setOpen] = useState(false);
         const [initialImage, setInitialImage] = useState(0);
 

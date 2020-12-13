@@ -1,6 +1,11 @@
 import { Theme } from "../../theme/theme";
-import { baseImageStyles, LazyImage } from "../common/LazyImage";
+import {
+    baseImageStyles,
+    LazyImage,
+    LazyImageProps,
+} from "../common/LazyImage";
 import { createStyles, withStyles } from "@material-ui/core";
+import React from "react";
 
 const lazyAboutImageStyles = (theme: Theme) =>
     createStyles({
@@ -15,6 +20,8 @@ const lazyAboutImageStyles = (theme: Theme) =>
         },
     });
 
-const LazyAboutImage = withStyles(lazyAboutImageStyles)(LazyImage);
+const LazyAboutImage: React.ComponentType<LazyImageProps> = withStyles(
+    lazyAboutImageStyles
+)(LazyImage);
 
 export { LazyAboutImage };

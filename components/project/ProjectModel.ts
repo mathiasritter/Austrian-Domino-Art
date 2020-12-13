@@ -4,26 +4,20 @@ export enum ProjectCategory {
     ENTERTAINMENT = "Entertainment",
 }
 
-interface BaseProject {
-    slug: string;
+export interface BaseProject {
     title: string;
-    summary: string;
-    categories: ProjectCategory[];
-    videos: string[];
-}
-
-export interface BackendProject extends BaseProject {
-    description: JSX.Element;
-}
-
-export interface Project extends BaseProject {
-    number: number;
-    thumbnail: string;
-    description: string;
-    images?: string[];
-}
-
-export interface ProjectImages {
     slug: string;
+    summary: string;
+    thumbnail: string;
+}
+
+export interface IndexedProject extends BaseProject {
+    index: number;
+}
+
+export interface FullProject extends BaseProject {
+    categories: string[];
+    description: string;
     images: string[];
+    videos?: string[];
 }

@@ -2,15 +2,16 @@ import {
     Card,
     createStyles,
     Divider,
-    Hidden,
     Typography,
     useMediaQuery,
     withStyles,
 } from "@material-ui/core";
 import React from "react";
+import BlockContent from "@sanity/block-content-to-react";
 import { Theme } from "../../theme/theme";
 import { PropsWithStyles } from "../../theme/styleTypes";
 import { CardContentEqualPadding } from "../common/CustomCard";
+import { serializers } from "../../lib/sanity";
 
 interface ProjectDescriptionProps {
     categories: string[];
@@ -72,10 +73,12 @@ const ProjectDescription = withStyles(projectDescriptionStyles)(
                         className={classes.content}
                         variant="body1"
                         component="div"
-                        dangerouslySetInnerHTML={{
-                            __html: description,
-                        }}
-                    />
+                    >
+                        <BlockContent
+                            blocks={description}
+                            serializers={serializers}
+                        />
+                    </Typography>
                 </CardContentEqualPadding>
             </Card>
         );
