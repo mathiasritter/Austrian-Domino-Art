@@ -9,7 +9,6 @@ import {
     PayloadAction,
     SerializedError,
 } from "@reduxjs/toolkit";
-import union from "lodash.union";
 
 interface ErrorAction extends Action<string> {
     error: SerializedError;
@@ -36,10 +35,17 @@ const mergePortfolioStates = (
     current: PortfolioState,
     preloaded: PortfolioState
 ): PortfolioState => {
+    const mergedProjects = [...current.projects];
+    preloaded.projects.forEach((preloadedProject, index) => {
+        if (mergedProjects[index] === undefined) {
+            mergedProjects[index] = preloadedProject;
+        }
+    });
+
     return {
         page: current.page,
         total: Math.max(preloaded.total, current.total),
-        projects: union(preloaded.projects, current.projects),
+        projects: mergedProjects,
     };
 };
 
