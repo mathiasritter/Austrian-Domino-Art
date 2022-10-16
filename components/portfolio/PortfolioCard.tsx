@@ -50,8 +50,8 @@ const PortfolioCard: React.FC<Props> = ({ projectIndex }) => {
             <Box
                 sx={{
                     width: "100%",
-                    sm: {
-                        display: "none",
+                    display: {
+                        sm: "none",
                     },
                 }}
             >
@@ -73,20 +73,20 @@ const PortfolioCard: React.FC<Props> = ({ projectIndex }) => {
                 <Divider />
             </Box>
             <Box
-                sx={{
+                sx={(theme) => ({
                     width: "100%",
                     height: "100%",
                     flexGrow: 1,
-                    xs: {
+                    [theme.breakpoints.down("sm")]: {
                         display: "flex",
                     },
-                }}
+                })}
             >
                 <Box
                     sx={(theme) => ({
                         position: "relative",
-                        [theme.breakpoints.down("xs")]: {
-                            width: "40%",
+                        [theme.breakpoints.down("sm")]: {
+                            flex: "0 0 40%",
                         },
                         [theme.breakpoints.up("sm")]: {
                             width: "100%",
@@ -102,22 +102,34 @@ const PortfolioCard: React.FC<Props> = ({ projectIndex }) => {
                         }
                         alt={`Thumbnail for ${project?.title}`}
                         fill
+                        style={{
+                            objectFit: "cover",
+                        }}
                     />
                 </Box>
                 <Box
-                    sx={{
+                    sx={(theme) => ({
                         padding: 2,
-                        xs: {
-                            display: "flex",
-                            alignItems: "center",
-                            width: "60%",
-                            minHeight: "98px",
+                        [theme.breakpoints.down("sm")]: {
+                            padding: 1,
+                            paddingLeft: 2,
                         },
-                        sm: {
-                            paddingTop: 0,
-                        },
-                    }}
+                    })}
                 >
+                    <Typography
+                        component="h2"
+                        variant="h5"
+                        color="textPrimary"
+                        paddingBottom={1}
+                        sx={{
+                            display: {
+                                sm: "block",
+                                xs: "none",
+                            },
+                        }}
+                    >
+                        {project ? project.title : <Skeleton />}
+                    </Typography>
                     <Typography
                         variant={atLeastSm ? "body1" : "body2"}
                         component="p"
