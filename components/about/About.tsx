@@ -1,9 +1,9 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
 import { AboutGrid } from "./AboutGrid";
 import { StatisticCard } from "./StatisticCard";
 import { LogoCard } from "./LogoCard";
-import { PictureBottomTopCard, PictureTopCard } from "./PictureCard";
+import Typography from "@mui/material/Typography";
+import { PictureCard } from "./PictureCard";
 
 const About: React.FC = () => (
     <>
@@ -27,7 +27,7 @@ const About: React.FC = () => (
                 inside="40 +"
                 below="Artists in Network"
             />
-            <PictureTopCard
+            <PictureCard
                 gridArea="card1"
                 image="https://res.cloudinary.com/austriandominoart/image/upload/c_scale,dpr_auto,f_auto,q_auto:eco,w_992/general/Dominoes-Structures.jpg"
                 alt="Various domino structures on a table"
@@ -38,8 +38,8 @@ const About: React.FC = () => (
                 art continues to mesmerize people from all over the globe. Our
                 extensive portfolio includes a wide variety of domino shows,
                 advertisements and workshops.
-            </PictureTopCard>
-            <PictureBottomTopCard
+            </PictureCard>
+            <PictureCard
                 gridArea="card2"
                 image="https://res.cloudinary.com/austriandominoart/image/upload/c_scale,dpr_auto,f_auto,q_auto:eco,w_992/general/Dominoes-Pile.jpg"
                 alt="A pile of white and golden dominoes"
@@ -51,8 +51,8 @@ const About: React.FC = () => (
                 Domino Art and partners have set up and toppled more than 3
                 million dominoes, including over 15 official Guinness World
                 Records.
-            </PictureBottomTopCard>
-            <PictureTopCard
+            </PictureCard>
+            <PictureCard
                 gridArea="card3"
                 image="https://res.cloudinary.com/austriandominoart/image/upload/c_scale,dpr_auto,f_auto,q_auto:eco,w_992/general/Dominoes-Dog.jpg"
                 alt="A dog who watches dominoes toppling"
@@ -63,7 +63,7 @@ const About: React.FC = () => (
                 impressing your target audience. If you are interested in a
                 solution for your business, contact us today. We greatly look
                 forward to working with you!
-            </PictureTopCard>
+            </PictureCard>
         </AboutGrid>
     </>
 );

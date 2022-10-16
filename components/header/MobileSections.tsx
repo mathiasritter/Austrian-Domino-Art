@@ -1,14 +1,8 @@
 import React, { PropsWithChildren } from "react";
-import { Theme } from "../../theme/theme";
 import { SectionWrapper } from "./SectionWrapper";
-import {
-    createStyles,
-    List,
-    ListItem,
-    ListItemText,
-    withStyles,
-} from "@material-ui/core";
-import { PropsWithStyles } from "../../theme/styleTypes";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 
 const MobileSectionsContainer = ({
     className,
@@ -25,44 +19,24 @@ interface MobileSectionProps {
     items: string[];
 }
 
-const mobileSectionStyles = (theme: Theme) =>
-    createStyles({
-        root: {
-            "& .active": {
-                backgroundColor: "rgba(255, 255, 255, 0.08)",
-            },
-            "& div": {
-                paddingRight: theme.spacing(2),
-                paddingLeft: theme.spacing(2),
-            },
-        },
-    });
-
-const MobileSections = withStyles(mobileSectionStyles)(
-    ({
-        classes,
-        closeDrawer,
-        onClick,
-        items,
-    }: PropsWithStyles<MobileSectionProps, typeof mobileSectionStyles>) => {
-        const handleClick = (event: React.SyntheticEvent) => {
-            onClick(event);
-            closeDrawer();
-        };
-        return (
-            <SectionWrapper
-                classes={classes}
-                containerTag={MobileSectionsContainer}
-                items={items}
-            >
-                {items.map((item: string) => (
-                    <ListItem key={item} button onClick={handleClick}>
-                        <ListItemText primary={item} />
-                    </ListItem>
-                ))}
-            </SectionWrapper>
-        );
-    }
-);
+const MobileSections: React.FC<MobileSectionProps> = ({
+    closeDrawer,
+    onClick,
+    items,
+}) => {
+    const handleClick = (event: React.SyntheticEvent) => {
+        onClick(event);
+        closeDrawer();
+    };
+    return (
+        <SectionWrapper containerTag={MobileSectionsContainer} items={items}>
+            {items.map((item: string) => (
+                <ListItem key={item} button onClick={handleClick}>
+                    <ListItemText primary={item} />
+                </ListItem>
+            ))}
+        </SectionWrapper>
+    );
+};
 
 export { MobileSections };

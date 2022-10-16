@@ -1,28 +1,18 @@
 import { FieldProps } from "formik";
 import React, { useCallback } from "react";
-import { createStyles, FormHelperText, withStyles } from "@material-ui/core";
 import ReCAPTCHA from "react-google-recaptcha";
 import LazyLoad from "react-lazyload";
-import { Theme } from "../../theme/theme";
-import { Skeleton } from "@material-ui/lab";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { PropsWithStyles } from "../../theme/styleTypes";
+import Skeleton from "@mui/material/Skeleton";
+import FormHelperText from "@mui/material/FormHelperText";
 
-const recaptchaSkeletonStyles = (theme: Theme) =>
-    createStyles({
-        root: {
-            height: "74px",
-            width: "100%",
-            maxWidth: "300px",
-        },
-    });
-
-const RecaptchaSkeleton = withStyles(
-    recaptchaSkeletonStyles
-)(({ classes }: PropsWithStyles) => (
-    <Skeleton variant="rect" className={classes.root} />
-));
+const RecaptchaSkeleton: React.FC = () => (
+    <Skeleton
+        variant="rectangular"
+        sx={{ height: "74px", width: "100%", maxWidth: "300px" }}
+    />
+);
 
 const RecaptchaField = ({
     form: { setFieldValue, setFieldError, setFieldTouched, touched, errors },

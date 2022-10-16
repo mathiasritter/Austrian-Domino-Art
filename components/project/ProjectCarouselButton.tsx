@@ -1,15 +1,9 @@
-import { OverridableComponent } from "@material-ui/core/OverridableComponent";
-import { SvgIconTypeMap } from "@material-ui/core/SvgIcon/SvgIcon";
 import React, { ComponentClass, PureComponent } from "react";
-import {
-    Button as MaterialButton,
-    createStyles,
-    withStyles,
-} from "@material-ui/core";
+import { Button as MaterialButton } from "@mui/material";
 import { CarouselStoreInterface, WithStore } from "pure-react-carousel";
-import CloseIcon from "@material-ui/icons/Close";
-import { Theme } from "../../theme/theme";
-import { PropsWithStyles } from "../../theme/styleTypes";
+import CloseIcon from "@mui/icons-material/Close";
+import { OverridableComponent } from "@mui/types";
+import { SvgIconTypeMap } from "@mui/material";
 
 interface OwnButtonProps {
     Icon: OverridableComponent<SvgIconTypeMap>;
@@ -81,9 +75,9 @@ interface CloseButtonProps {
     onClick: () => void;
 }
 
-const closeButtonStyles = (theme: Theme) =>
-    createStyles({
-        root: {
+const CloseButton: React.FC<CloseButtonProps> = ({ onClick }) => (
+    <MaterialButton
+        sx={(theme) => ({
             borderRadius: 0,
             [theme.breakpoints.down("md")]: {
                 position: "absolute",
@@ -95,19 +89,12 @@ const closeButtonStyles = (theme: Theme) =>
                 marginLeft: "auto",
                 marginRight: "auto",
             },
-        },
-    });
-
-const CloseButton = withStyles(closeButtonStyles)(
-    ({ classes, onClick }: PropsWithStyles<CloseButtonProps>) => (
-        <MaterialButton
-            className={classes.root}
-            onClick={onClick}
-            aria-label="close"
-        >
-            <CloseIcon />
-        </MaterialButton>
-    )
+        })}
+        onClick={onClick}
+        aria-label="close"
+    >
+        <CloseIcon />
+    </MaterialButton>
 );
 
 export {

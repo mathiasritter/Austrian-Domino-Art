@@ -1,10 +1,11 @@
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-import red from "@material-ui/core/colors/red";
-import grey from "@material-ui/core/colors/grey";
-import responsiveFontSizes from "@material-ui/core/styles/responsiveFontSizes";
-import { PaletteType } from "@material-ui/core";
+import { red, grey } from "@mui/material/colors";
+import {
+    PaletteMode,
+    createTheme as createMuiTheme,
+    responsiveFontSizes,
+} from "@mui/material";
 
-const createTheme = (type: PaletteType, h1Color: string) =>
+const createTheme = (mode: PaletteMode, h1Color: string) =>
     responsiveFontSizes(
         createMuiTheme({
             palette: {
@@ -14,7 +15,7 @@ const createTheme = (type: PaletteType, h1Color: string) =>
                 secondary: {
                     main: grey[600],
                 },
-                type,
+                mode,
             },
             typography: {
                 fontSize: 16,

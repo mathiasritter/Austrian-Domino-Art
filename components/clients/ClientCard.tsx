@@ -1,11 +1,9 @@
 import { clientLogos } from "./clientLogos";
 import React from "react";
-import { Theme } from "../../theme/theme";
-import { CardActionArea, createStyles, withStyles } from "@material-ui/core";
 import Link from "next/link";
 import { BrightCard } from "./BrightCard";
-import { LazyClientImage } from "./LazyClientImage";
-import { PropsWithStyles } from "../../theme/styleTypes";
+import Image from "next/image";
+import CardActionArea from "@mui/material/CardActionArea";
 
 interface ClientCardProps {
     company: string;
@@ -15,34 +13,36 @@ interface ClientCardProps {
     className?: string;
 }
 
-const clientCardStyles = (theme: Theme) =>
-    createStyles({
-        actionArea: {
-            height: "100%",
-        },
-    });
-
-const ClientCard = withStyles(clientCardStyles)(
-    ({
-        company,
-        url,
-        slug,
-        classes,
-        gridArea,
-        className,
-    }: PropsWithStyles<ClientCardProps, typeof clientCardStyles>) => (
-        <BrightCard className={className} style={{ gridArea }}>
-            <Link
-                href={"/portfolio/[slug]"}
-                as={`/portfolio/${slug}`}
-                passHref={true}
+const ClientCard: React.FC<ClientCardProps> = ({
+    company,
+    url,
+    slug,
+    gridArea,
+    className,
+}) => (
+    <BrightCard className={className} style={{ gridArea }}>
+        <Link
+            href={"/portfolio/[slug]"}
+            as={`/portfolio/${slug}`}
+            passHref={true}
+        >
+            <CardActionArea
+                sx={{
+                    actionArea: {
+                        height: "100%",
+                    },
+                }}
+                component="a"
             >
-                <CardActionArea className={classes.actionArea} component="a">
-                    <LazyClientImage src={url} alt={`Logo of ${company}`} />
-                </CardActionArea>
-            </Link>
-        </BrightCard>
-    )
+                <Image
+                    src={url}
+                    alt={`Logo of ${company}`}
+                    layout="fill"
+                    objectFit="cover"
+                />
+            </CardActionArea>
+        </Link>
+    </BrightCard>
 );
 
 const clientCards = Object.entries(clientLogos).map(

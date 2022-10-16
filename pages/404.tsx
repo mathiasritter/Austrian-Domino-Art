@@ -1,19 +1,19 @@
 import React from "react";
 import { PortfolioNavBar } from "../components/header/PortfolioNavBar";
-import { GreySection } from "./index";
+import { Section } from "./index";
+import Link from "next/link";
 import {
-    Button,
     Card,
-    CardActions,
     CardContent,
     Typography,
-} from "@material-ui/core";
-import Link from "next/link";
+    CardActions,
+    Button,
+} from "@mui/material";
 
 const NotFound = () => (
     <>
         <PortfolioNavBar />
-        <GreySection>
+        <Section background="paper">
             <Card>
                 <CardContent>
                     <Typography variant="h2" component="h1" gutterBottom>
@@ -29,7 +29,7 @@ const NotFound = () => (
                     </Link>
                 </CardActions>
             </Card>
-        </GreySection>
+        </Section>
     </>
 );
 

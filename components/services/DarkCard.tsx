@@ -1,12 +1,8 @@
-import { Theme } from "../../theme/theme";
-import { createStyles, withStyles } from "@material-ui/core";
 import { CustomCard } from "../common/CustomCard";
+import { styled } from "@mui/material";
 
-const darkCardStyles = (theme: Theme) =>
-    createStyles({
-        root: { backgroundColor: theme.palette.background.default },
-    });
-
-const DarkCard = withStyles(darkCardStyles)(CustomCard);
+const DarkCard = styled(CustomCard)(({ theme }) => ({
+    backgroundColor: theme.palette.background.default,
+}));
 
 export { DarkCard };

@@ -1,96 +1,76 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Box, Card, createStyles, withStyles } from "@material-ui/core";
-import { Theme } from "../../theme/theme";
-import { PropsWithStyles } from "../../theme/styleTypes";
-import { createDiv } from "../common/createDiv";
-import { LazyProjectImage } from "./LazyProjectImage";
+import Image from "next/image";
 import { ProjectCarouselModal } from "./ProjectCarouselModal";
+import { Card, styled, Box } from "@mui/material";
 
 interface ProjectImageListProps {
     images: string[] | null;
     title: string;
 }
 
-const imageListStyles = (theme: Theme) =>
-    createStyles({
-        root: {},
-        card: {
-            cursor: "pointer",
-            display: "flex",
-            width: "100%",
+const ProjectImageList: React.FC<ProjectImageListProps> = ({
+    images,
+    title,
+}) => {
+    const [open, setOpen] = useState(false);
+    const [initialImage, setInitialImage] = useState(0);
+
+    const createHandleOpen = useCallback(
+        (initialImage: number) => () => {
+            setInitialImage(initialImage);
+            setOpen(true);
         },
-        image: {
-            objectFit: "contain",
-            width: "100%",
-            height: "100%",
-        },
-    });
+        [setOpen, setInitialImage]
+    );
 
-const ProjectImageList = withStyles(imageListStyles)(
-    ({
-        images,
-        title,
-        classes,
-    }: PropsWithStyles<ProjectImageListProps, typeof imageListStyles>) => {
-        const [open, setOpen] = useState(false);
-        const [initialImage, setInitialImage] = useState(0);
+    const handleClose = useCallback(() => {
+        setOpen(false);
+    }, [setOpen]);
 
-        const createHandleOpen = useCallback(
-            (initialImage: number) => () => {
-                setInitialImage(initialImage);
-                setOpen(true);
-            },
-            [setOpen, setInitialImage]
-        );
-
-        const handleClose = useCallback(() => {
-            setOpen(false);
-        }, [setOpen]);
-
-        const imageElements = useMemo(
-            () =>
-                images.map((image: string, index: number) => (
-                    <LazyProjectImage
-                        key={image}
-                        src={image}
-                        alt={`Image ${index + 1} of ${
-                            images.length
-                        } for project ${title}`}
-                    />
-                )),
-            [images]
-        );
-
-        return (
-            <>
-                <ImageGrid>
-                    {imageElements.map((element, index) => (
-                        <Box
-                            key={element.key}
-                            display="flex"
-                            alignItems="center"
-                        >
-                            <Card
-                                className={classes.card}
-                                onClick={createHandleOpen(index)}
-                            >
-                                {element}
-                            </Card>
-                        </Box>
-                    ))}
-                </ImageGrid>
-                <ProjectCarouselModal
-                    initialImage={initialImage}
-                    open={open}
-                    handleClose={handleClose}
-                    imageElements={imageElements}
+    const imageElements = useMemo(
+        () =>
+            images.map((image: string, index: number) => (
+                <Image
+                    key={image}
+                    src={image}
+                    alt={`Image ${index + 1} of ${
+                        images.length
+                    } for project ${title}`}
+                    layout="fill"
                 />
-            </>
-        );
-    }
-);
+            )),
+        [images]
+    );
 
-export const ImageGrid = createDiv((theme: Theme) => ({
+    return (
+        <>
+            <ImageGrid>
+                {imageElements.map((element, index) => (
+                    <Box key={element.key} display="flex" alignItems="center">
+                        <Card
+                            onClick={createHandleOpen(index)}
+                            sx={{
+                                cursor: "pointer",
+                                display: "flex",
+                                width: "100%",
+                            }}
+                        >
+                            {element}
+                        </Card>
+                    </Box>
+                ))}
+            </ImageGrid>
+            <ProjectCarouselModal
+                initialImage={initialImage}
+                open={open}
+                handleClose={handleClose}
+                imageElements={imageElements}
+            />
+        </>
+    );
+};
+
+export const ImageGrid = styled("div")(({ theme }) => ({
     display: "grid",
     gridGap: theme.spacing(1),
 

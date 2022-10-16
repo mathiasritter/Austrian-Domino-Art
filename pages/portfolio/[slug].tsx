@@ -7,17 +7,16 @@ import {
     NextPage,
 } from "next";
 import { SeoHead } from "../../components/head/SeoHead";
-import { GreySection } from "../index";
-import { Theme } from "../../theme/theme";
+import { Section } from "../index";
 import { ProjectDescription } from "../../components/project/ProjectDescription";
 import { ProjectVideos } from "../../components/project/ProjectVideos";
-import { createDiv } from "../../components/common/createDiv";
 import { ProjectImageList } from "../../components/project/ProjectImageList";
 import { ProjectTitle } from "../../components/project/ProjectTitle";
 import groq from "groq";
 import { sanityClient, urlFor } from "../../lib/sanity";
 import { FullProject } from "../../components/project/ProjectModel";
 import NotFound from "../404";
+import { styled } from "@mui/system";
 
 interface Props {
     project: FullProject;
@@ -48,7 +47,7 @@ const Portfolio: NextPage<Props, Props> = ({ project }: Props) => {
                 image={thumbnail}
             />
             <PortfolioNavBar />
-            <GreySection>
+            <Section background="paper">
                 <ProjectGrid>
                     <ProjectTitle>{title}</ProjectTitle>
                     <ProjectVideos videos={videos} title={title} />
@@ -58,12 +57,12 @@ const Portfolio: NextPage<Props, Props> = ({ project }: Props) => {
                     />
                     <ProjectImageList images={images} title={title} />
                 </ProjectGrid>
-            </GreySection>
+            </Section>
         </>
     );
 };
 
-const ProjectGrid = createDiv((theme: Theme) => ({
+const ProjectGrid = styled("div")(({ theme }) => ({
     display: "grid",
     gridGap: theme.spacing(2),
     gridTemplateColumns: "1fr",

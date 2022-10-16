@@ -1,7 +1,6 @@
-import { Theme } from "../../theme/theme";
-import { createDiv } from "../common/createDiv";
+import { styled } from "@mui/system";
 
-const Grid = createDiv((theme: Theme) => ({
+const Grid = styled("div")(({ theme }) => ({
     display: "grid",
     gridGap: theme.spacing(2),
     [theme.breakpoints.up("lg")]: {

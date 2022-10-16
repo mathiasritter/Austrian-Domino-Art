@@ -40,6 +40,9 @@ module.exports = withSourceMaps({
     serverRuntimeConfig: {
         rootDir: __dirname,
     },
+    images: {
+        domains: ["res.cloudinary.com", "cdn.sanity.io"],
+    },
     webpack: (config, options) => {
         // In `pages/_app.js`, Sentry is imported from @sentry/browser. While
         // @sentry/node will run in a Node.js environment. @sentry/node will use

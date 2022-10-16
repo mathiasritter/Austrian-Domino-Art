@@ -1,9 +1,9 @@
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { Theme } from "../../theme/theme";
 import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setPage } from "./portfolioSlice";
+import { useMediaQuery } from "@mui/material";
 
 const usePaginatedProjects = () => {
     const total = useSelector((state: RootState) => state.portfolio.total);

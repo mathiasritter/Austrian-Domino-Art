@@ -1,20 +1,19 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import About from "../components/about/About";
 import Clients from "../components/clients/Clients";
 import Contact from "../components/contact/Contact";
 import { Home } from "../components/home/Home";
 import Portfolio from "../components/portfolio/Portfolio";
 import Services from "../components/services/Services";
-import { Container, createStyles, withStyles } from "@material-ui/core";
+import Container from "@mui/material/Container";
 import { HomeNavBar } from "../components/header/HomeNavBar";
 import { SeoHead } from "../components/head/SeoHead";
 import { GetStaticProps, NextPage } from "next";
 import { initializeStore, InitialReduxStateProps } from "../store";
 import { setProjects, setTotal } from "../components/portfolio/portfolioSlice";
-import { Theme } from "../theme/theme";
-import { PropsWithStylesAndChildren } from "../theme/styleTypes";
 import { sanityClient } from "../lib/sanity";
 import groq from "groq";
+import Box from "@mui/material/Box";
 
 const Index: NextPage = () => (
     <>
@@ -28,56 +27,57 @@ const Index: NextPage = () => (
         <section id="home">
             <Home />
         </section>
-        <GreySection id="portfolio">
+        <Section background="default" id="portfolio">
             <Portfolio />
-        </GreySection>
-        <WhiteSection id="services">
+        </Section>
+        {/*
+
+        <Section background="paper" id="services">
             <Services />
-        </WhiteSection>
-        <GreySection id="about">
+        </Section>
+        <Section background="default" id="about">
             <About />
-        </GreySection>
-        <WhiteSection id="clients">
+        </Section>
+        <Section background="paper" id="clients">
             <Clients />
-        </WhiteSection>
-        <GreySection id="contact">
+        </Section>
+        <Section background="default" id="contact">
             <Contact />
-        </GreySection>
+        </Section>
+             */}
     </>
 );
 
-const Section: React.FC<PropsWithStylesAndChildren<{ id?: string }>> = (
-    props: PropsWithStylesAndChildren<{ id?: string }>
-) => (
-    <section id={props.id} className={props.classes.root}>
-        <Container maxWidth="xl">{props.children}</Container>
-    </section>
+interface SectionProps {
+    id?: string;
+    background: "default" | "paper";
+}
+
+const Section: React.FC<PropsWithChildren<SectionProps>> = ({
+    id,
+    background,
+    children,
+}) => (
+    <Box
+        component="section"
+        id={id}
+        sx={(theme) => ({
+            background: theme.palette.grey["900"],
+            paddingTop: {
+                xs: 8.5,
+                sm: 9.5,
+                md: 11,
+            },
+            paddingBottom: {
+                xs: 8.5,
+                sm: 9.5,
+                md: 11,
+            },
+        })}
+    >
+        <Container maxWidth="xl">{children}</Container>
+    </Box>
 );
-
-const makeSectionStyles = (background: "default" | "paper") => (theme: Theme) =>
-    createStyles({
-        root: {
-            background: theme.palette.background[background],
-            [theme.breakpoints.up("md")]: {
-                paddingTop: theme.spacing(11),
-                paddingBottom: theme.spacing(11),
-            },
-            [theme.breakpoints.only("sm")]: {
-                paddingTop: theme.spacing(9.5),
-                paddingBottom: theme.spacing(9.5),
-            },
-            [theme.breakpoints.down("xs")]: {
-                paddingTop: theme.spacing(8.5),
-                paddingBottom: theme.spacing(8.5),
-            },
-        },
-    });
-
-const whiteSectionStyles = makeSectionStyles("paper");
-const greySectionStyles = makeSectionStyles("default");
-
-const WhiteSection = withStyles(whiteSectionStyles)(Section);
-const GreySection = withStyles(greySectionStyles)(Section);
 
 const getStaticProps: GetStaticProps<InitialReduxStateProps> = async () => {
     const store = initializeStore();
@@ -112,4 +112,4 @@ const getStaticProps: GetStaticProps<InitialReduxStateProps> = async () => {
 };
 
 export default Index;
-export { GreySection, getStaticProps };
+export { getStaticProps, Section };

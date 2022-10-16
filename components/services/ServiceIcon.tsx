@@ -1,13 +1,8 @@
-import {
-    Box,
-    SvgIcon,
-    SvgIconTypeMap,
-    useMediaQuery,
-    useTheme,
-} from "@material-ui/core";
 import React, { useMemo } from "react";
-import { OverridableComponent } from "@material-ui/core/OverridableComponent";
 import { Theme } from "../../theme/theme";
+import { OverridableComponent } from "@mui/types";
+import { SvgIcon, SvgIconTypeMap, useMediaQuery } from "@mui/material";
+import { Box, useTheme } from "@mui/system";
 
 interface Props {
     icon: OverridableComponent<SvgIconTypeMap>;
@@ -22,9 +17,10 @@ const ServiceIcon = (props: Props) => {
         theme.breakpoints.up("md")
     );
 
-    const outerIconSize = useMemo(() => (atLeastMd ? 200 : 200 / 1.5), [
-        atLeastMd,
-    ]);
+    const outerIconSize = useMemo(
+        () => (atLeastMd ? 200 : 200 / 1.5),
+        [atLeastMd]
+    );
 
     const innerIconSize = useMemo(
         () => (atLeastMd ? props.iconSize : props.iconSize / 1.5),
@@ -32,7 +28,22 @@ const ServiceIcon = (props: Props) => {
     );
 
     return (
-        <Box textAlign="center" position="relative" className={props.className}>
+        <Box
+            textAlign="center"
+            position="relative"
+            sx={(theme) => ({
+                [theme.breakpoints.up("md")]: {
+                    marginTop: theme.spacing(2),
+                    marginBottom: theme.spacing(2),
+                },
+                [theme.breakpoints.only("sm")]: {
+                    marginRight: theme.spacing(1),
+                },
+                [theme.breakpoints.down("xs")]: {
+                    marginBottom: theme.spacing(1),
+                },
+            })}
+        >
             <SvgIcon viewBox="0 0 100 100" style={{ fontSize: outerIconSize }}>
                 <circle
                     cx="50"

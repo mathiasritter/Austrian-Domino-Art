@@ -1,8 +1,7 @@
-import { Theme } from "../../theme/theme";
 import { logoOrder } from "./clientLogos";
-import { createDiv } from "../common/createDiv";
+import { styled } from "@mui/system";
 
-export const ClientsGrid = createDiv((theme: Theme) => ({
+export const ClientsGrid = styled("div")(({ theme }) => ({
     display: "grid",
     gridGap: theme.spacing(2),
     "& .hidden-md-down": {

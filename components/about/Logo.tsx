@@ -1,21 +1,14 @@
 import React from "react";
-import { Theme } from "../../theme/theme";
-import { createStyles, withStyles } from "@material-ui/core";
-import { PropsWithStyles } from "../../theme/styleTypes";
+import SvgIcon from "@mui/material/SvgIcon";
 
-const logoStyles = (theme: Theme) =>
-    createStyles({
-        root: {
+const Logo: React.FC = () => (
+    <SvgIcon
+        sx={{
             height: "100%",
             width: "100%",
             userSelect: "none",
             cursor: "default",
-        },
-    });
-
-const Logo = withStyles(logoStyles)(({ classes }: PropsWithStyles) => (
-    <svg
-        className={classes.root}
+        }}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 240.5 240.5"
     >
@@ -122,7 +115,7 @@ const Logo = withStyles(logoStyles)(({ classes }: PropsWithStyles) => (
                 </tspan>
             </text>
         </g>
-    </svg>
-));
+    </SvgIcon>
+);
 
 export { Logo };

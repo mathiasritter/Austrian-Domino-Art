@@ -1,4 +1,3 @@
-import { ThemeProvider } from "@material-ui/styles";
 import React, { PropsWithChildren, useEffect, useMemo } from "react";
 import { useAppDispatch, useTypedSelector } from "../store";
 import { darkTheme, lightTheme } from "./theme";
@@ -7,10 +6,10 @@ import {
     initialThemeType,
     setThemeType,
 } from "./themeSlice";
+import { ThemeProvider } from "@mui/material";
 
 const ThemeWrapper: React.FC<PropsWithChildren<any>> = ({
     children,
-    store,
 }: PropsWithChildren<any>) => {
     const dispatch = useAppDispatch();
 
@@ -18,9 +17,10 @@ const ThemeWrapper: React.FC<PropsWithChildren<any>> = ({
         (state) => state.theme.type === "light"
     );
 
-    const theme = useMemo(() => (isLightTheme ? lightTheme : darkTheme), [
-        isLightTheme,
-    ]);
+    const theme = useMemo(
+        () => (isLightTheme ? lightTheme : darkTheme),
+        [isLightTheme]
+    );
 
     useEffect(() => {
         dispatch(setThemeType(initialThemeType()));

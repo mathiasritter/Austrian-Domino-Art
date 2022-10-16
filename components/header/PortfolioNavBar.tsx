@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 import { NavBar } from "./NavBar";
 import { DesktopSections } from "./DesktopSections";
 import { useRouter } from "next/router";

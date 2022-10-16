@@ -1,11 +1,11 @@
 import { RootState } from "../../store";
 import { createSelector } from "@reduxjs/toolkit";
 import React from "react";
-import { Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
 import { useSelector } from "react-redux";
 import { useAction } from "../../hooks/useAction";
 import { closeNotification } from "./notificationSlice";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
 interface NotificationProps {
     id: string;

@@ -1,21 +1,17 @@
 import Link from "next/link";
 import React from "react";
-import { Theme } from "../../theme/theme";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { ServiceIcon } from "./ServiceIcon";
+import { DarkCard } from "./DarkCard";
+import { OverridableComponent } from "@mui/types";
 import {
     Box,
     CardActionArea,
     CardContent,
-    createStyles,
     Divider,
     SvgIconTypeMap,
     Typography,
-    withStyles,
-} from "@material-ui/core";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import { OverridableComponent } from "@material-ui/core/OverridableComponent";
-import { ServiceIcon } from "./ServiceIcon";
-import { DarkCard } from "./DarkCard";
-import { PropsWithStyles } from "../../theme/styleTypes";
+} from "@mui/material";
 
 interface Props {
     name: string;
@@ -25,131 +21,103 @@ interface Props {
     iconSize: number;
 }
 
-const serviceCardStyles = (theme: Theme) =>
-    createStyles({
-        actionArea: {
-            display: "flex",
-            flexDirection: "column",
-            height: "100%",
-        },
-        content: {
-            display: "flex",
-            flexGrow: 1,
-            height: "100%",
-            "&:last-child": {
-                paddingBottom: theme.spacing(2),
-            },
-            [theme.breakpoints.up("md")]: {
-                flexDirection: "column",
-            },
-            [theme.breakpoints.only("sm")]: {
-                alignItems: "center",
-            },
-            [theme.breakpoints.only("xs")]: {
-                flexDirection: "column",
-            },
-        },
-        icon: {
-            [theme.breakpoints.up("md")]: {
-                marginTop: theme.spacing(2),
-                marginBottom: theme.spacing(2),
-            },
-            [theme.breakpoints.only("sm")]: {
-                marginRight: theme.spacing(1),
-            },
-            [theme.breakpoints.down("xs")]: {
-                marginBottom: theme.spacing(1),
-            },
-        },
-        arrow: {
-            [theme.breakpoints.only("sm")]: {
-                transform: "rotate(-90deg)",
-            },
-            [theme.breakpoints.down("xs")]: {
-                display: "none",
-            },
-        },
-        text: {
-            flexGrow: 1,
-            display: "flex",
-            flexDirection: "column",
-        },
-        title: {
-            [theme.breakpoints.up("md")]: {
-                textAlign: "center",
-            },
-            [theme.breakpoints.down("xs")]: {
-                textAlign: "center",
-            },
-            paddingBottom: theme.spacing(0.5),
-        },
-        description: {
-            flexGrow: 1,
-            paddingTop: theme.spacing(1),
-            hyphens: "auto",
-            "-webkit-hyphens": "auto",
-            "-ms-hyphens": "auto",
-        },
-    });
-
-const ServiceCard = withStyles(serviceCardStyles)(
-    (props: PropsWithStyles<Props, typeof serviceCardStyles>) => (
-        <DarkCard>
-            <Link
-                href={"/portfolio/[slug]"}
-                as={`/portfolio/${props.exampleSlug}`}
-                passHref={true}
+const ServiceCard: React.FC<Props> = (props) => (
+    <DarkCard>
+        <Link
+            href={"/portfolio/[slug]"}
+            as={`/portfolio/${props.exampleSlug}`}
+            passHref={true}
+        >
+            <CardActionArea
+                component="a"
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                }}
             >
-                <CardActionArea
-                    className={props.classes.actionArea}
-                    component="a"
+                <CardContent
+                    sx={(theme) => ({
+                        display: "flex",
+                        flexGrow: 1,
+                        height: "100%",
+                        "&:last-child": {
+                            paddingBottom: theme.spacing(2),
+                        },
+                        [theme.breakpoints.up("md")]: {
+                            flexDirection: "column",
+                        },
+                        [theme.breakpoints.only("sm")]: {
+                            alignItems: "center",
+                        },
+                        [theme.breakpoints.only("xs")]: {
+                            flexDirection: "column",
+                        },
+                    })}
                 >
-                    <CardContent className={props.classes.content}>
-                        <ServiceIcon
-                            icon={props.icon}
-                            iconSize={props.iconSize}
-                            className={props.classes.icon}
+                    <ServiceIcon icon={props.icon} iconSize={props.iconSize} />
+                    <Box
+                        textAlign="center"
+                        sx={(theme) => ({
+                            [theme.breakpoints.only("sm")]: {
+                                transform: "rotate(-90deg)",
+                            },
+                            [theme.breakpoints.down("xs")]: {
+                                display: "none",
+                            },
+                        })}
+                    >
+                        <KeyboardArrowDownIcon
+                            fontSize="large"
+                            color="secondary"
                         />
-                        <Box textAlign="center" className={props.classes.arrow}>
-                            <KeyboardArrowDownIcon
-                                fontSize="large"
-                                color="secondary"
-                            />
-                        </Box>
-                        <Box className={props.classes.text}>
-                            <Typography
-                                variant="h4"
-                                component="h2"
-                                className={props.classes.title}
-                            >
-                                {props.name}
+                    </Box>
+                    <Box
+                        sx={{
+                            flexGrow: 1,
+                            display: "flex",
+                            flexDirection: "column",
+                        }}
+                    >
+                        <Typography
+                            variant="h4"
+                            component="h2"
+                            sx={(theme) => ({
+                                [theme.breakpoints.up("md")]: {
+                                    textAlign: "center",
+                                },
+                                [theme.breakpoints.down("xs")]: {
+                                    textAlign: "center",
+                                },
+                                paddingBottom: theme.spacing(0.5),
+                            })}
+                        >
+                            {props.name}
+                        </Typography>
+                        <Divider />
+                        <Typography
+                            gutterBottom
+                            variant="body1"
+                            component="p"
+                            align="justify"
+                            sx={{
+                                flexGrow: 1,
+                                paddingTop: 1,
+                                hyphens: "auto",
+                            }}
+                        >
+                            {props.description}
+                        </Typography>
+                        <Box fontStyle="italic">
+                            <Typography variant="body2" color="textSecondary">
+                                Click for an example
                             </Typography>
-                            <Divider />
-                            <Typography
-                                className={props.classes.description}
-                                gutterBottom
-                                variant="body1"
-                                component="p"
-                                align="justify"
-                            >
-                                {props.description}
-                            </Typography>
-                            <Box fontStyle="italic">
-                                <Typography
-                                    variant="body2"
-                                    color="textSecondary"
-                                >
-                                    Click for an example
-                                </Typography>
-                            </Box>
                         </Box>
-                    </CardContent>
-                </CardActionArea>
-            </Link>
-        </DarkCard>
-    )
+                    </Box>
+                </CardContent>
+            </CardActionArea>
+        </Link>
+    </DarkCard>
 );
-
-// TODO make button text secondary
 
 export default ServiceCard;

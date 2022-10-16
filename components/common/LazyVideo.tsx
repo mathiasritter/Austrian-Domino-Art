@@ -1,26 +1,20 @@
-import { Theme } from "../../theme/theme";
-import { Skeleton } from "@material-ui/lab";
 import React from "react";
 import LazyLoad from "react-lazyload";
-import { PropsWithStyles } from "../../theme/styleTypes";
-import { Box, createStyles, withStyles } from "@material-ui/core";
+import Skeleton from "@mui/material/Skeleton";
+import Box from "@mui/material/Box";
 
-const videoSkeletonStyles = (theme: Theme) =>
-    createStyles({
-        root: {
-            height: "100%",
-        },
-    });
+const VideoSkeleton: React.FC = () => (
+    <Skeleton sx={{ height: "100%" }} variant="rectangular" />
+);
 
-const VideoSkeleton = withStyles(
-    videoSkeletonStyles
-)(({ classes }: PropsWithStyles) => (
-    <Skeleton variant="rect" className={classes.root} />
-));
+export interface VideoProps {
+    videoId: string;
+    title: string;
+}
 
-const lazyVideoStyles = (theme: Theme) =>
-    createStyles({
-        root: {
+const LazyVideo: React.FC<VideoProps> = ({ videoId, title }) => (
+    <Box
+        sx={{
             width: "100%",
             marginTop: "auto",
             marginBottom: "auto",
@@ -35,28 +29,18 @@ const lazyVideoStyles = (theme: Theme) =>
                 height: "100%",
                 borderRadius: "4px",
             },
-        },
-    });
-
-export interface VideoProps {
-    videoId: string;
-    title: string;
-}
-
-const LazyVideo = withStyles(lazyVideoStyles)(
-    ({ videoId, title, classes }: PropsWithStyles<VideoProps>) => (
-        <Box className={classes.root}>
-            <LazyLoad once={true} offset={500} placeholder={<VideoSkeleton />}>
-                <iframe
-                    src={`https://www.youtube.com/embed/${videoId}?rel=0`}
-                    frameBorder="0"
-                    allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    title={title}
-                />
-            </LazyLoad>
-        </Box>
-    )
+        }}
+    >
+        <LazyLoad once={true} offset={500} placeholder={<VideoSkeleton />}>
+            <iframe
+                src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+                frameBorder="0"
+                allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title={title}
+            />
+        </LazyLoad>
+    </Box>
 );
 
 export { LazyVideo };

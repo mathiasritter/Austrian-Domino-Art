@@ -1,8 +1,9 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
 import { ClientsGrid } from "./ClientsGrid";
 import { clientCards } from "./ClientCard";
 import { ClientVideo } from "./ClientVideo";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 const Clients: React.FC = () => (
     <>

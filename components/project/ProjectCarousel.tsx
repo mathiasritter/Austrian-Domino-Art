@@ -1,9 +1,7 @@
 import React from "react";
-import { Box, createStyles, withStyles } from "@material-ui/core";
-import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
-import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { Theme } from "../../theme/theme";
-import { PropsWithStyles } from "../../theme/styleTypes";
 import {
     nextBackStylesMd,
     ButtonBack,
@@ -11,6 +9,7 @@ import {
     CloseButton,
 } from "./ProjectCarouselButton";
 import { CarouselProvider, Slide, Slider } from "pure-react-carousel";
+import { Box, styled } from "@mui/material";
 
 interface CarouselProps {
     items: JSX.Element[];
@@ -27,81 +26,67 @@ const maxHeight = (theme: Theme) => ({
     },
 });
 
-const carouselStyles = (theme: Theme) =>
-    createStyles({
-        root: {
-            top: "50%",
-            transform: "translateY(-50%)",
-            position: "absolute",
-            backgroundColor: theme.palette.background.default,
-        },
-        carouselProvider: {
-            display: "flex",
-        },
-        slider: {
-            ...maxHeight(theme),
-        },
-        slide: {
-            "& img": {
-                ...maxHeight(theme),
-            },
-        },
-        arrowPrev: {
-            borderRadius: 0,
-            [theme.breakpoints.down("md")]: {
-                ...nextBackStylesMd,
-                left: 0,
-            },
-        },
-        arrowNext: {
-            borderRadius: 0,
-            [theme.breakpoints.down("md")]: {
-                ...nextBackStylesMd,
-                right: 0,
-            },
-        },
-    });
+const StyledCarouselProvider = styled(CarouselProvider)({
+    display: "flex",
+});
 
-const ProjectCarousel: React.FC<PropsWithStyles<
-    CarouselProps,
-    typeof carouselStyles
->> = ({
+const StyledSlider = styled(Slider)(({ theme }) => maxHeight(theme));
+const StyledSlide = styled(Slide)(({ theme }) => ({
+    "& img": {
+        ...maxHeight(theme),
+    },
+}));
+
+const StyledButtonBack = styled(ButtonBack)(({ theme }) => ({
+    borderRadius: 0,
+    [theme.breakpoints.down("md")]: {
+        ...nextBackStylesMd,
+        left: 0,
+    },
+}));
+
+const StyledButtonNext = styled(ButtonNext)(({ theme }) => ({
+    borderRadius: 0,
+    [theme.breakpoints.down("md")]: {
+        ...nextBackStylesMd,
+        right: 0,
+    },
+}));
+
+const ProjectImageCarousel: React.FC<CarouselProps> = ({
     items,
     handleClose,
     initialImage,
-    classes,
-}: PropsWithStyles<CarouselProps, typeof carouselStyles>) => (
-    <div className={classes.root}>
+}) => (
+    <Box
+        sx={{
+            top: "50%",
+            transform: "translateY(-50%)",
+            position: "absolute",
+            backgroundColor: "palette.background.default",
+        }}
+    >
         <Box display="flex" alignItems="stretch" flexDirection="column">
             <CloseButton onClick={handleClose} />
         </Box>
-        <CarouselProvider
-            className={classes.carouselProvider}
+        <StyledCarouselProvider
             currentSlide={initialImage}
             naturalSlideWidth={1}
             naturalSlideHeight={1}
             totalSlides={items.length}
             isIntrinsicHeight={true}
         >
-            <ButtonBack
-                className={classes.arrowPrev}
-                Icon={KeyboardArrowLeftIcon}
-            />
-            <Slider className={classes.slider}>
+            <StyledButtonBack Icon={KeyboardArrowLeftIcon} />
+            <StyledSlider>
                 {items.map((item, index) => (
-                    <Slide className={classes.slide} index={index} key={index}>
+                    <StyledSlide index={index} key={index}>
                         {item}
-                    </Slide>
+                    </StyledSlide>
                 ))}
-            </Slider>
-            <ButtonNext
-                className={classes.arrowNext}
-                Icon={KeyboardArrowRightIcon}
-            />
-        </CarouselProvider>
-    </div>
+            </StyledSlider>
+            <StyledButtonNext Icon={KeyboardArrowRightIcon} />
+        </StyledCarouselProvider>
+    </Box>
 );
-
-const ProjectImageCarousel = withStyles(carouselStyles)(ProjectCarousel);
 
 export { ProjectImageCarousel };
