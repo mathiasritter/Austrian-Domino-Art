@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import Image from "next/future/image";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "../../store";
 import Link from "next/link";
 import { Theme } from "../../theme/theme";
 import { fetchProject } from "./portfolioSlice";
-import { urlFor } from "../../lib/sanity";
 import {
     Box,
     Card,
@@ -25,7 +24,7 @@ const PortfolioCard: React.FC<Props> = ({ projectIndex }) => {
         (state: RootState) => state.portfolio.projects[projectIndex]
     );
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (!project) {
@@ -94,18 +93,27 @@ const PortfolioCard: React.FC<Props> = ({ projectIndex }) => {
                         },
                     })}
                 >
-                    <Image
-                        src={
-                            project
-                                ? urlFor(project.thumbnail).url()
-                                : undefined
-                        }
-                        alt={`Thumbnail for ${project?.title}`}
-                        fill
-                        style={{
-                            objectFit: "cover",
-                        }}
-                    />
+                    {project ? (
+                        <Image
+                            src={project.thumbnail}
+                            alt={`Thumbnail for ${project.title}`}
+                            fill
+                            style={{
+                                objectFit: "cover",
+                            }}
+                            placeholder="blur"
+                            blurDataURL={project.thumbnailPreview}
+                        />
+                    ) : (
+                        <Skeleton
+                            variant="rectangular"
+                            sx={{
+                                position: "absolute",
+                                height: "100%",
+                                width: "100%",
+                            }}
+                        />
+                    )}
                 </Box>
                 <Box
                     sx={(theme) => ({

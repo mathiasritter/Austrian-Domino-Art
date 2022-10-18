@@ -11,11 +11,23 @@ import { SeoHead } from "../components/head/SeoHead";
 import { GetStaticProps, NextPage } from "next";
 import { initializeStore, InitialReduxStateProps } from "../store";
 import { setProjects, setTotal } from "../components/portfolio/portfolioSlice";
-import { sanityClient } from "../lib/sanity";
+import { sanityClient, urlFor } from "../lib/sanity";
 import groq from "groq";
 import Box from "@mui/material/Box";
+import { getPlaiceholder } from "plaiceholder";
+import { ImageProps } from "../lib/types";
+import { getImageProps } from "../lib/images";
 
-const Index: NextPage = () => (
+interface PageProps {
+    backgroundImage: ImageProps;
+    aboutImages: {
+        card1Image: ImageProps;
+        card2Image: ImageProps;
+        card3Image: ImageProps;
+    };
+}
+
+const Index: NextPage<PageProps> = ({ backgroundImage, aboutImages }) => (
     <>
         <SeoHead
             title="Austrian Domino Art - Professional Domino Toppling"
@@ -25,26 +37,24 @@ const Index: NextPage = () => (
         />
         <HomeNavBar />
         <section id="home">
-            <Home />
+            <Home {...backgroundImage} />
         </section>
         <Section background="default" id="portfolio">
             <Portfolio />
         </Section>
-        {/*
-
         <Section background="paper" id="services">
             <Services />
         </Section>
         <Section background="default" id="about">
-            <About />
+            <About {...aboutImages} />
         </Section>
+
         <Section background="paper" id="clients">
             <Clients />
         </Section>
         <Section background="default" id="contact">
             <Contact />
         </Section>
-             */}
     </>
 );
 
@@ -61,8 +71,8 @@ const Section: React.FC<PropsWithChildren<SectionProps>> = ({
     <Box
         component="section"
         id={id}
-        sx={(theme) => ({
-            background: theme.palette.grey["900"],
+        sx={{
+            bgcolor: `background.${background}`,
             paddingTop: {
                 xs: 8.5,
                 sm: 9.5,
@@ -73,13 +83,15 @@ const Section: React.FC<PropsWithChildren<SectionProps>> = ({
                 sm: 9.5,
                 md: 11,
             },
-        })}
+        }}
     >
         <Container maxWidth="xl">{children}</Container>
     </Box>
 );
 
-const getStaticProps: GetStaticProps<InitialReduxStateProps> = async () => {
+const getStaticProps: GetStaticProps<
+    InitialReduxStateProps & PageProps
+> = async () => {
     const store = initializeStore();
 
     const totalResult = await sanityClient.fetch(groq`
@@ -100,12 +112,47 @@ const getStaticProps: GetStaticProps<InitialReduxStateProps> = async () => {
           }
         }
     `);
-    const projects = projectsResult.projects;
+
+    const projects = await Promise.all(
+        projectsResult.projects.map(async (project) => {
+            const thumbnail = urlFor(project.thumbnail).url();
+            const { base64 } = await getPlaiceholder(thumbnail);
+            return {
+                ...project,
+                thumbnail,
+                thumbnailPreview: base64,
+            };
+        })
+    );
+
     store.dispatch(setProjects(projects));
+
+    const backgroundImage = await getImageProps(
+        "https://res.cloudinary.com/austriandominoart/image/upload/general/AustrianDominoArt-BG.jpg",
+        "red and white dominoes showing the Austrian Domino Art logo"
+    );
+    const card1Image = await getImageProps(
+        "https://res.cloudinary.com/austriandominoart/image/upload/general/Dominoes-Structures.jpg",
+        "Various domino structures on a table"
+    );
+    const card2Image = await getImageProps(
+        "https://res.cloudinary.com/austriandominoart/image/upload/general/Dominoes-Pile.jpg",
+        "A pile of white and golden dominoes"
+    );
+    const card3Image = await getImageProps(
+        "https://res.cloudinary.com/austriandominoart/image/upload/general/Dominoes-Dog.jpg",
+        "A dog who watches dominoes toppling"
+    );
 
     return {
         props: {
             initialReduxState: store.getState(),
+            backgroundImage,
+            aboutImages: {
+                card1Image,
+                card2Image,
+                card3Image,
+            },
         },
         revalidate: 10,
     };

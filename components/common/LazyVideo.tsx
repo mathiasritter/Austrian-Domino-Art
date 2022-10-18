@@ -1,5 +1,4 @@
 import React from "react";
-import LazyLoad from "react-lazyload";
 import Skeleton from "@mui/material/Skeleton";
 import Box from "@mui/material/Box";
 
@@ -31,15 +30,13 @@ const LazyVideo: React.FC<VideoProps> = ({ videoId, title }) => (
             },
         }}
     >
-        <LazyLoad once={true} offset={500} placeholder={<VideoSkeleton />}>
-            <iframe
-                src={`https://www.youtube.com/embed/${videoId}?rel=0`}
-                frameBorder="0"
-                allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title={title}
-            />
-        </LazyLoad>
+        <iframe
+            src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+            frameBorder="0"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title={title}
+        />
     </Box>
 );
 

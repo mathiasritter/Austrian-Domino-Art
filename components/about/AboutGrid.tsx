@@ -27,7 +27,7 @@ const AboutGrid = styled("div")(({ theme }) => ({
             "card2 card3"
         `,
     },
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down("sm")]: {
         gridTemplateColumns: "repeat(2, 1fr)",
         gridTemplateAreas: `
             "logo stat1"

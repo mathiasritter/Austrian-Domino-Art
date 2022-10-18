@@ -6,7 +6,7 @@ import Link from "@mui/material/Link";
 import NoSsr from "@mui/material/NoSsr";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Image from "next/image";
+import Image from "next/future/image";
 
 export const Contact: React.FC = () => (
     <>
@@ -31,12 +31,14 @@ export const Contact: React.FC = () => (
                     <ContactForm />
                 </CardContent>
             </Card>
-            <Card>
+            <Card sx={{ position: "relative" }}>
                 <Image
-                    alt="red and white dominoes showing the Austrian Domino Art logo"
+                    alt="Multiple colourful domino walls on a prop"
                     src="https://res.cloudinary.com/austriandominoart/image/upload/c_scale,dpr_auto,f_auto,q_auto:eco,w_1200/general/Dominoes-Walls.jpg"
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    style={{
+                        objectFit: "cover",
+                    }}
                 />
             </Card>
         </ContactGrid>

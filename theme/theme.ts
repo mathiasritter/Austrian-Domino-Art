@@ -1,4 +1,4 @@
-import { red, grey } from "@mui/material/colors";
+import { red, grey, white } from "@mui/material/colors";
 import {
     PaletteMode,
     createTheme as createMuiTheme,
@@ -16,6 +16,10 @@ const createTheme = (mode: PaletteMode, h1Color: string) =>
                     main: grey[600],
                 },
                 mode,
+                background: {
+                    default: mode === "light" ? "#fafafa" : "#303030",
+                    paper: mode === "light" ? "#fff" : "#424242",
+                },
             },
             typography: {
                 fontSize: 16,

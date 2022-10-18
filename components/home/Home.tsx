@@ -3,10 +3,11 @@ import { Background } from "./Background";
 import { Title } from "./Title";
 import { Arrow } from "./Arrow";
 import Box from "@mui/material/Box";
+import { ImageProps } from "../../lib/types";
 
-const Home = () => (
+const Home: React.FC<ImageProps> = (props) => (
     <Box sx={{ height: "100vh" }}>
-        <Background />
+        <Background {...props} />
         <Box
             sx={{
                 zIndex: "1",

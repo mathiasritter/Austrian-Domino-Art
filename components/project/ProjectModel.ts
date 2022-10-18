@@ -9,6 +9,7 @@ export interface BaseProject {
     slug: string;
     summary: string;
     thumbnail: string;
+    thumbnailPreview: string;
 }
 
 export interface IndexedProject extends BaseProject {

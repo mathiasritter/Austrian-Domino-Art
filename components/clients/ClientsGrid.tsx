@@ -4,6 +4,11 @@ import { styled } from "@mui/system";
 export const ClientsGrid = styled("div")(({ theme }) => ({
     display: "grid",
     gridGap: theme.spacing(2),
+    "& .hidden-lg-down": {
+        [theme.breakpoints.down("lg")]: {
+            display: "none",
+        },
+    },
     "& .hidden-md-down": {
         [theme.breakpoints.down("md")]: {
             display: "none",
@@ -11,11 +16,6 @@ export const ClientsGrid = styled("div")(({ theme }) => ({
     },
     "& .hidden-sm-down": {
         [theme.breakpoints.down("sm")]: {
-            display: "none",
-        },
-    },
-    "& .hidden-xs-down": {
-        [theme.breakpoints.down("xs")]: {
             display: "none",
         },
     },
@@ -44,7 +44,7 @@ export const ClientsGrid = styled("div")(({ theme }) => ({
             "${logoOrder[4]} ${logoOrder[5]} ${logoOrder[6]} ${logoOrder[7]}"
         `,
     },
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down("sm")]: {
         gridTemplateColumns: "repeat(2, 1fr)",
         gridTemplateAreas: `
             "video video"

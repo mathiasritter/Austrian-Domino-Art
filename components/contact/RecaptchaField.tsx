@@ -1,7 +1,6 @@
 import { FieldProps } from "formik";
 import React, { useCallback } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import LazyLoad from "react-lazyload";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import Skeleton from "@mui/material/Skeleton";
@@ -41,7 +40,7 @@ const RecaptchaField = ({
     );
 
     return (
-        <LazyLoad once={true} placeholder={<RecaptchaSkeleton />}>
+        <>
             <ReCAPTCHA
                 sitekey="6LctLokUAAAAANg8kc9_bNTcFr8882wp6NhOmhO3"
                 onChange={onChange}
@@ -52,7 +51,7 @@ const RecaptchaField = ({
             {touched[name] && errors[name] && (
                 <FormHelperText error>{errors[name]}</FormHelperText>
             )}
-        </LazyLoad>
+        </>
     );
 };
 

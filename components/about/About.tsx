@@ -4,8 +4,19 @@ import { StatisticCard } from "./StatisticCard";
 import { LogoCard } from "./LogoCard";
 import Typography from "@mui/material/Typography";
 import { PictureCard } from "./PictureCard";
+import { ImageProps } from "../../lib/types";
 
-const About: React.FC = () => (
+interface AboutProps {
+    card1Image: ImageProps;
+    card2Image: ImageProps;
+    card3Image: ImageProps;
+}
+
+const About: React.FC<AboutProps> = ({
+    card1Image,
+    card2Image,
+    card3Image,
+}) => (
     <>
         <Typography variant="h1" gutterBottom>
             About
@@ -27,11 +38,7 @@ const About: React.FC = () => (
                 inside="40 +"
                 below="Artists in Network"
             />
-            <PictureCard
-                gridArea="card1"
-                image="https://res.cloudinary.com/austriandominoart/image/upload/c_scale,dpr_auto,f_auto,q_auto:eco,w_992/general/Dominoes-Structures.jpg"
-                alt="Various domino structures on a table"
-            >
+            <PictureCard gridArea="card1" image={card1Image}>
                 Founded in 2008, Austrian Domino Art specialises in the
                 organisation, design and execution of innovative domino art.
                 With its fascinating structures and spectacular effects, domino
@@ -39,11 +46,7 @@ const About: React.FC = () => (
                 extensive portfolio includes a wide variety of domino shows,
                 advertisements and workshops.
             </PictureCard>
-            <PictureCard
-                gridArea="card2"
-                image="https://res.cloudinary.com/austriandominoart/image/upload/c_scale,dpr_auto,f_auto,q_auto:eco,w_992/general/Dominoes-Pile.jpg"
-                alt="A pile of white and golden dominoes"
-            >
+            <PictureCard gridArea="card2" image={card2Image}>
                 As a full-service provider, we offer tailored domino projects:
                 from the initial idea through to the final domino to topple.
                 Thanks to our network of over 40 domino artists, we provide
@@ -52,11 +55,7 @@ const About: React.FC = () => (
                 million dominoes, including over 15 official Guinness World
                 Records.
             </PictureCard>
-            <PictureCard
-                gridArea="card3"
-                image="https://res.cloudinary.com/austriandominoart/image/upload/c_scale,dpr_auto,f_auto,q_auto:eco,w_992/general/Dominoes-Dog.jpg"
-                alt="A dog who watches dominoes toppling"
-            >
+            <PictureCard gridArea="card3" image={card3Image}>
                 Whether it be for entertainment, advertisement, team workshops
                 or any other purpose: domino art is the perfect solution when it
                 comes to improving team work, conveying messages or simply
@@ -69,3 +68,4 @@ const About: React.FC = () => (
 );
 
 export default About;
+export type { AboutProps };
