@@ -1,7 +1,6 @@
 import React from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import { Theme } from "../../theme/theme";
 import {
     nextBackStylesMd,
     ButtonBack,
@@ -17,41 +16,19 @@ interface CarouselProps {
     initialImage: number;
 }
 
-const maxHeight = (theme: Theme) => ({
-    [theme.breakpoints.up("lg")]: {
-        maxHeight: "calc(90vh - 40px)",
-    },
-    [theme.breakpoints.down("md")]: {
-        maxHeight: "100vh",
-    },
-});
-
-const StyledCarouselProvider = styled(CarouselProvider)({
+const StyledCarouselProvider = styled(CarouselProvider)(({ theme }) => ({
     display: "flex",
+    flexGrow: 1,
+}));
+
+const StyledSlider = styled(Slider)({
+    flexGrow: 1,
 });
+const StyledSlide = styled(Slide)({});
 
-const StyledSlider = styled(Slider)(({ theme }) => maxHeight(theme));
-const StyledSlide = styled(Slide)(({ theme }) => ({
-    "& img": {
-        ...maxHeight(theme),
-    },
-}));
+const StyledButtonBack = styled(ButtonBack)();
 
-const StyledButtonBack = styled(ButtonBack)(({ theme }) => ({
-    borderRadius: 0,
-    [theme.breakpoints.down("md")]: {
-        ...nextBackStylesMd,
-        left: 0,
-    },
-}));
-
-const StyledButtonNext = styled(ButtonNext)(({ theme }) => ({
-    borderRadius: 0,
-    [theme.breakpoints.down("md")]: {
-        ...nextBackStylesMd,
-        right: 0,
-    },
-}));
+const StyledButtonNext = styled(ButtonNext)();
 
 const ProjectImageCarousel: React.FC<CarouselProps> = ({
     items,
@@ -60,15 +37,14 @@ const ProjectImageCarousel: React.FC<CarouselProps> = ({
 }) => (
     <Box
         sx={{
+            position: "absolute",
+            left: 0,
+            right: 0,
             top: "50%",
             transform: "translateY(-50%)",
-            position: "absolute",
-            backgroundColor: "palette.background.default",
+            display: "flex",
         }}
     >
-        <Box display="flex" alignItems="stretch" flexDirection="column">
-            <CloseButton onClick={handleClose} />
-        </Box>
         <StyledCarouselProvider
             currentSlide={initialImage}
             naturalSlideWidth={1}
@@ -80,7 +56,17 @@ const ProjectImageCarousel: React.FC<CarouselProps> = ({
             <StyledSlider>
                 {items.map((item, index) => (
                     <StyledSlide index={index} key={index}>
-                        {item}
+                        <Box
+                            key={index}
+                            sx={{
+                                position: "relative",
+                                height: "100%",
+                                width: "100%",
+                                paddingBottom: "min(75%, 100vh)",
+                            }}
+                        >
+                            {item}
+                        </Box>
                     </StyledSlide>
                 ))}
             </StyledSlider>

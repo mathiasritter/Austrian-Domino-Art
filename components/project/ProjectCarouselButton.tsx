@@ -41,6 +41,11 @@ const Button = class Button extends PureComponent<ButtonProps> {
                 disabled={!this.props.hasNext}
                 onClick={this.handleClick}
                 aria-label={this.props.ariaLabel}
+                variant="contained"
+                disableElevation
+                sx={{
+                    borderRadius: "unset",
+                }}
             >
                 <this.props.Icon />
             </MaterialButton>

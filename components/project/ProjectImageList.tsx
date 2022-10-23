@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
-import Image from "next/image";
+import Image from "next/future/image";
 import { ProjectCarouselModal } from "./ProjectCarouselModal";
 import { Card, styled, Box } from "@mui/material";
 
@@ -36,7 +36,10 @@ const ProjectImageList: React.FC<ProjectImageListProps> = ({
                     alt={`Image ${index + 1} of ${
                         images.length
                     } for project ${title}`}
-                    layout="fill"
+                    fill
+                    style={{
+                        objectFit: "cover",
+                    }}
                 />
             )),
         [images]
@@ -46,13 +49,15 @@ const ProjectImageList: React.FC<ProjectImageListProps> = ({
         <>
             <ImageGrid>
                 {imageElements.map((element, index) => (
-                    <Box key={element.key} display="flex" alignItems="center">
+                    <Box key={element.key}>
                         <Card
                             onClick={createHandleOpen(index)}
                             sx={{
+                                position: "relative",
+                                paddingBottom: index <= 2 ? "56%" : "75%", // TODO fill with image ratio
+                                top: "50%",
+                                transform: "translateY(-50%)",
                                 cursor: "pointer",
-                                display: "flex",
-                                width: "100%",
                             }}
                         >
                             {element}
@@ -80,7 +85,7 @@ export const ImageGrid = styled("div")(({ theme }) => ({
     [theme.breakpoints.only("md")]: {
         gridTemplateColumns: "repeat(3, 1fr)",
     },
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down("md")]: {
         gridTemplateColumns: "repeat(2, 1fr)",
     },
 }));
