@@ -1,12 +1,7 @@
 import React from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import {
-    nextBackStylesMd,
-    ButtonBack,
-    ButtonNext,
-    CloseButton,
-} from "./ProjectCarouselButton";
+import { ButtonBack, ButtonNext, CloseButton } from "./ProjectCarouselButton";
 import { CarouselProvider, Slide, Slider } from "pure-react-carousel";
 import { Box, styled } from "@mui/material";
 
@@ -17,12 +12,12 @@ interface CarouselProps {
 }
 
 const StyledCarouselProvider = styled(CarouselProvider)(({ theme }) => ({
-    display: "flex",
-    flexGrow: 1,
+    // display: "flex",
+    // flexGrow: 1,
 }));
 
 const StyledSlider = styled(Slider)({
-    flexGrow: 1,
+    // flexGrow: 1,
 });
 const StyledSlide = styled(Slide)({});
 
@@ -38,11 +33,11 @@ const ProjectImageCarousel: React.FC<CarouselProps> = ({
     <Box
         sx={{
             position: "absolute",
-            left: 0,
-            right: 0,
+            width: "100%",
+            display: "table",
             top: "50%",
             transform: "translateY(-50%)",
-            display: "flex",
+            bgcolor: "background.default",
         }}
     >
         <StyledCarouselProvider
@@ -52,6 +47,7 @@ const ProjectImageCarousel: React.FC<CarouselProps> = ({
             totalSlides={items.length}
             isIntrinsicHeight={true}
         >
+            <CloseButton onClick={handleClose} />
             <StyledButtonBack Icon={KeyboardArrowLeftIcon} />
             <StyledSlider>
                 {items.map((item, index) => (
@@ -60,9 +56,12 @@ const ProjectImageCarousel: React.FC<CarouselProps> = ({
                             key={index}
                             sx={{
                                 position: "relative",
-                                height: "100%",
-                                width: "100%",
+                                // height: "100%",
+                                // width: "100%",
                                 paddingBottom: "min(75%, 100vh)",
+                                img: {
+                                    objectFit: "contain",
+                                },
                             }}
                         >
                             {item}

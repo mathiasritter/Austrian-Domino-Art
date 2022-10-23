@@ -37,9 +37,6 @@ const ProjectImageList: React.FC<ProjectImageListProps> = ({
                         images.length
                     } for project ${title}`}
                     fill
-                    style={{
-                        objectFit: "cover",
-                    }}
                 />
             )),
         [images]
@@ -58,6 +55,9 @@ const ProjectImageList: React.FC<ProjectImageListProps> = ({
                                 top: "50%",
                                 transform: "translateY(-50%)",
                                 cursor: "pointer",
+                                img: {
+                                    objectFit: "cover",
+                                },
                             }}
                         >
                             {element}

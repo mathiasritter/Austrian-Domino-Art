@@ -1,5 +1,5 @@
 import React, { ComponentClass, PureComponent } from "react";
-import { Button as MaterialButton } from "@mui/material";
+import { Button as MaterialButton, IconButton, styled } from "@mui/material";
 import { CarouselStoreInterface, WithStore } from "pure-react-carousel";
 import CloseIcon from "@mui/icons-material/Close";
 import { OverridableComponent } from "@mui/types";
@@ -36,40 +36,43 @@ const Button = class Button extends PureComponent<ButtonProps> {
 
     public render(): JSX.Element {
         return (
-            <MaterialButton
+            <IconButton
                 className={this.props.className}
                 disabled={!this.props.hasNext}
                 onClick={this.handleClick}
                 aria-label={this.props.ariaLabel}
-                variant="contained"
-                disableElevation
+                color="primary"
                 sx={{
-                    borderRadius: "unset",
+                    position: "absolute",
+                    zIndex: 2,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    backdropFilter: "blur(10px)",
                 }}
+                size="large"
             >
                 <this.props.Icon />
-            </MaterialButton>
+            </IconButton>
         );
     }
 };
 
-const nextBackStylesMd = {
-    position: "absolute",
-    zIndex: 2,
-    top: 0,
-    bottom: 0,
-    marginTop: "auto",
-    marginBottom: "auto",
-};
+const ButtonNext = styled(Button)(({ theme }) => ({
+    right: theme.spacing(1),
+}));
 
-const ConnectedButtonNext = WithStore(Button, (state) => ({
+const ButtonBack = styled(Button)(({ theme }) => ({
+    left: theme.spacing(1),
+}));
+
+const ConnectedButtonNext = WithStore(ButtonNext, (state) => ({
     step: 1,
     currentSlide: state.currentSlide,
     hasNext: state.currentSlide < state.totalSlides - 1,
     ariaLabel: "next image",
 })) as ComponentClass<OwnButtonProps>;
 
-const ConnectedButtonBack = WithStore(Button, (state) => ({
+const ConnectedButtonBack = WithStore(ButtonBack, (state) => ({
     step: -1,
     currentSlide: state.currentSlide,
     hasNext: state.currentSlide > 0,
@@ -81,30 +84,25 @@ interface CloseButtonProps {
 }
 
 const CloseButton: React.FC<CloseButtonProps> = ({ onClick }) => (
-    <MaterialButton
+    <IconButton
         sx={(theme) => ({
-            borderRadius: 0,
-            [theme.breakpoints.down("md")]: {
-                position: "absolute",
-                width: "100%",
-                zIndex: 1,
-                right: 0,
-                top: 0,
-                left: 0,
-                marginLeft: "auto",
-                marginRight: "auto",
-            },
+            position: "absolute",
+            zIndex: 1,
+            right: theme.spacing(1),
+            top: theme.spacing(1),
+            backdropFilter: "blur(10px)",
         })}
+        color="primary"
         onClick={onClick}
         aria-label="close"
+        size="large"
     >
         <CloseIcon />
-    </MaterialButton>
+    </IconButton>
 );
 
 export {
     ConnectedButtonNext as ButtonNext,
     ConnectedButtonBack as ButtonBack,
     CloseButton,
-    nextBackStylesMd,
 };
