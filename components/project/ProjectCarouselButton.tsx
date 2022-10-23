@@ -47,7 +47,6 @@ const Button = class Button extends PureComponent<ButtonProps> {
                     zIndex: 2,
                     top: "50%",
                     transform: "translateY(-50%)",
-                    backdropFilter: "blur(10px)",
                 }}
                 size="large"
             >
@@ -90,7 +89,6 @@ const CloseButton: React.FC<CloseButtonProps> = ({ onClick }) => (
             zIndex: 1,
             right: theme.spacing(1),
             top: theme.spacing(1),
-            backdropFilter: "blur(10px)",
         })}
         color="primary"
         onClick={onClick}
