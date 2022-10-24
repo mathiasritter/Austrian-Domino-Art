@@ -26,15 +26,12 @@ const PictureCard: React.FC<PropsWithChildren<PictureProps>> = ({
             gridArea,
         }}
     >
-        <Box
-            sx={{
-                position: "relative",
-                width: "100%",
-                paddingBottom: "56.25%",
-            }}
-        >
-            <Image {...image} fill placeholder="blur" />
-        </Box>
+        <Image
+            {...image}
+            placeholder="blur"
+            sizes="100vw"
+            style={{ width: "100%", height: "auto" }}
+        />
         <CardContent
             sx={{
                 flexGrow: 1,

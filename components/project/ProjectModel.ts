@@ -1,3 +1,5 @@
+import { ImageProps } from "../../lib/types";
+
 export enum ProjectCategory {
     ADVERTISEMENT = "Advertisement",
     WORKSHOP = "Workshop",
@@ -8,8 +10,7 @@ export interface BaseProject {
     title: string;
     slug: string;
     summary: string;
-    thumbnail: string;
-    thumbnailPreview: string;
+    thumbnail: ImageProps;
 }
 
 export interface IndexedProject extends BaseProject {

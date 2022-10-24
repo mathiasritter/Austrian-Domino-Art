@@ -17,6 +17,7 @@ import Box from "@mui/material/Box";
 import { getPlaiceholder } from "plaiceholder";
 import { ImageProps } from "../lib/types";
 import { getImageProps } from "../lib/images";
+import { ClientLogo, getClientLogos } from "../lib/transformClientLogos";
 
 interface PageProps {
     backgroundImage: ImageProps;
@@ -25,9 +26,14 @@ interface PageProps {
         card2Image: ImageProps;
         card3Image: ImageProps;
     };
+    clientLogos: ClientLogo[];
 }
 
-const Index: NextPage<PageProps> = ({ backgroundImage, aboutImages }) => (
+const Index: NextPage<PageProps> = ({
+    backgroundImage,
+    aboutImages,
+    clientLogos,
+}) => (
     <>
         <SeoHead
             title="Austrian Domino Art - Professional Domino Toppling"
@@ -48,9 +54,8 @@ const Index: NextPage<PageProps> = ({ backgroundImage, aboutImages }) => (
         <Section background="default" id="about">
             <About {...aboutImages} />
         </Section>
-
         <Section background="paper" id="clients">
-            <Clients />
+            <Clients logos={clientLogos} />
         </Section>
         <Section background="default" id="contact">
             <Contact />
@@ -115,12 +120,13 @@ const getStaticProps: GetStaticProps<
 
     const projects = await Promise.all(
         projectsResult.projects.map(async (project) => {
-            const thumbnail = urlFor(project.thumbnail).url();
-            const { base64 } = await getPlaiceholder(thumbnail);
+            const thumbnail = await getImageProps(
+                urlFor(project.thumbnail).url(),
+                `Thumbnail for ${project.title}`
+            );
             return {
                 ...project,
                 thumbnail,
-                thumbnailPreview: base64,
             };
         })
     );
@@ -144,6 +150,8 @@ const getStaticProps: GetStaticProps<
         "A dog who watches dominoes toppling"
     );
 
+    const clientLogos = await getClientLogos();
+
     return {
         props: {
             initialReduxState: store.getState(),
@@ -153,6 +161,7 @@ const getStaticProps: GetStaticProps<
                 card2Image,
                 card3Image,
             },
+            clientLogos,
         },
         revalidate: 10,
     };

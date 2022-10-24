@@ -1,8 +1,8 @@
 import { IndexedProject } from "../../../components/project/ProjectModel";
 import { sanityClient, urlFor } from "../../../lib/sanity";
 import groq from "groq";
-import { getPlaiceholder } from "plaiceholder";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getImageProps } from "../../../lib/images";
 
 const getProjectByIndex = async (index: number): Promise<IndexedProject> => {
     const { project: projectResponse } = await sanityClient.fetch(
@@ -19,11 +19,12 @@ const getProjectByIndex = async (index: number): Promise<IndexedProject> => {
         { index }
     );
 
-    const thumbnail = urlFor(projectResponse.thumbnail).url();
-    const { base64 } = await getPlaiceholder(thumbnail);
+    const thumbnail = await getImageProps(
+        urlFor(projectResponse.thumbnail).url(),
+        `Thumbnail for ${projectResponse.title}`
+    );
     const project = {
         ...projectResponse,
-        thumbnailPreview: base64,
         thumbnail,
     };
 

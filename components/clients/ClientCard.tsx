@@ -1,22 +1,20 @@
-import { clientLogos } from "./clientLogos";
 import React from "react";
 import Link from "next/link";
 import { BrightCard } from "./BrightCard";
 import Image from "next/future/image";
 import CardActionArea from "@mui/material/CardActionArea";
 import { useTheme } from "@mui/system";
+import { ImageProps } from "../../lib/types";
 
 interface ClientCardProps {
-    company: string;
-    url: string;
+    image: ImageProps;
     gridArea: string;
     slug: string;
     className?: string;
 }
 
 const ClientCard: React.FC<ClientCardProps> = ({
-    company,
-    url,
+    image,
     slug,
     gridArea,
     className,
@@ -31,57 +29,29 @@ const ClientCard: React.FC<ClientCardProps> = ({
                 passHref={true}
             >
                 <CardActionArea
-                    sx={{
-                        position: "relative",
-                        height: "100%",
-                        width: "100%",
-                        [theme.breakpoints.up("xl")]: {
-                            minHeight: "170px",
-                        },
-                        [theme.breakpoints.up("md")]: {
-                            minHeight: "130px",
-                        },
-                        [theme.breakpoints.down("md")]: {
-                            minHeight: "100px",
-                        },
-                    }}
                     component="a"
+                    style={{
+                        height: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                    }}
                 >
                     <Image
-                        src={url}
-                        alt={`Logo of ${company}`}
-                        fill
+                        {...image}
+                        placeholder="blur"
+                        sizes="100vw"
                         style={{
-                            objectFit: "contain",
+                            maxWidth: "100%",
+                            maxHeight: "200px",
+                            height: "auto",
                             padding: theme.spacing(2),
+                            objectFit: "contain",
                         }}
                     />
                 </CardActionArea>
             </Link>
         </BrightCard>
     );
-}
+};
 
-const clientCards = Object.entries(clientLogos).map(
-    ([name, [slug, url]]: [string, [string, string]], index: number) => {
-        let className = "";
-        if (index >= 8 && index < 10) {
-            className = "hidden-md-down";
-        }
-        if (index >= 10) {
-            className = "hidden-lg-down";
-        }
-        return (
-            <ClientCard
-                key={name}
-                className={className}
-                gridArea={name}
-                company={name}
-                url={url}
-                slug={slug}
-            />
-        );
-    }
-);
-
-export { clientCards };
+export { ClientCard };

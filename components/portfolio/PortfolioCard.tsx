@@ -84,25 +84,27 @@ const PortfolioCard: React.FC<Props> = ({ projectIndex }) => {
                 <Box
                     sx={(theme) => ({
                         position: "relative",
-                        [theme.breakpoints.down("sm")]: {
-                            flex: "0 0 40%",
-                        },
                         [theme.breakpoints.up("sm")]: {
                             width: "100%",
                             paddingBottom: "66.66%",
+                        },
+                        [theme.breakpoints.down("sm")]: {
+                            flex: "0 0 40%",
+                            minHeight: "100px",
                         },
                     })}
                 >
                     {project ? (
                         <Image
-                            src={project.thumbnail}
-                            alt={`Thumbnail for ${project.title}`}
-                            fill
-                            style={{
-                                objectFit: "cover",
-                            }}
+                            {...project.thumbnail}
+                            sizes="50vw"
                             placeholder="blur"
-                            blurDataURL={project.thumbnailPreview}
+                            style={{
+                                position: "absolute",
+                                objectFit: "cover",
+                                maxWidth: "100%",
+                                maxHeight: "100%",
+                            }}
                         />
                     ) : (
                         <Skeleton
@@ -119,8 +121,12 @@ const PortfolioCard: React.FC<Props> = ({ projectIndex }) => {
                     sx={(theme) => ({
                         padding: 2,
                         [theme.breakpoints.down("sm")]: {
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
                             padding: 1,
                             paddingLeft: 2,
+                            width: "100%",
                         },
                     })}
                 >

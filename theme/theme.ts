@@ -1,4 +1,4 @@
-import { red, grey, white } from "@mui/material/colors";
+import { red, grey } from "@mui/material/colors";
 import {
     PaletteMode,
     createTheme as createMuiTheme,

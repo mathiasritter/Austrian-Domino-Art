@@ -17,6 +17,8 @@ import { sanityClient, urlFor } from "../../lib/sanity";
 import { FullProject } from "../../components/project/ProjectModel";
 import NotFound from "../404";
 import { styled } from "@mui/system";
+import { initializeStore } from "../../store";
+import { getImageProps } from "../../lib/images";
 
 interface Props {
     project: FullProject;
@@ -44,7 +46,7 @@ const Portfolio: NextPage<Props, Props> = ({ project }: Props) => {
                 title={`Austrian Domino Art - ${title}`}
                 description={summary}
                 url={`https://www.domino.art/portfolio/${slug}`}
-                image={thumbnail}
+                image={thumbnail.src}
             />
             <PortfolioNavBar />
             <Section background="paper">
@@ -93,11 +95,19 @@ const getStaticProps: GetStaticProps<Props> = async ({
         return { notFound: true };
     }
 
-    project.thumbnail = urlFor(project.thumbnail).url();
+    project.thumbnail = await getImageProps(
+        urlFor(project.thumbnail).url(),
+        `Thumbnail for ${project.title}`
+    );
     project.images = project.images.map((image) => urlFor(image).url());
 
+    const store = initializeStore();
+
     return {
-        props: { project },
+        props: {
+            initialReduxState: store.getState(),
+            project,
+        },
         revalidate: 10,
     };
 };
