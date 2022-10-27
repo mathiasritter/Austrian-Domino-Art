@@ -2,9 +2,10 @@ import React, { useCallback, useMemo, useState } from "react";
 import Image from "next/future/image";
 import { ProjectCarouselModal } from "./ProjectCarouselModal";
 import { Card, styled, Box } from "@mui/material";
+import { ImageProps } from "../../lib/types";
 
 interface ProjectImageListProps {
-    images: string[] | null;
+    images: ImageProps[] | null;
     title: string;
 }
 
@@ -29,14 +30,13 @@ const ProjectImageList: React.FC<ProjectImageListProps> = ({
 
     const imageElements = useMemo(
         () =>
-            images.map((image: string, index: number) => (
+            images.map((image) => (
                 <Image
-                    key={image}
-                    src={image}
-                    alt={`Image ${index + 1} of ${
-                        images.length
-                    } for project ${title}`}
-                    fill
+                    {...image}
+                    key={image.alt}
+                    placeholder="blur"
+                    sizes="100vw"
+                    style={{ width: "100%", height: "auto" }}
                 />
             )),
         [images]
@@ -50,14 +50,11 @@ const ProjectImageList: React.FC<ProjectImageListProps> = ({
                         <Card
                             onClick={createHandleOpen(index)}
                             sx={{
+                                display: "flex",
                                 position: "relative",
-                                paddingBottom: index <= 2 ? "56%" : "75%", // TODO fill with image ratio
                                 top: "50%",
                                 transform: "translateY(-50%)",
                                 cursor: "pointer",
-                                img: {
-                                    objectFit: "cover",
-                                },
                             }}
                         >
                             {element}

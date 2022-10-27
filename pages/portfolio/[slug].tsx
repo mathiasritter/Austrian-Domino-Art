@@ -99,7 +99,15 @@ const getStaticProps: GetStaticProps<Props> = async ({
         urlFor(project.thumbnail).url(),
         `Thumbnail for ${project.title}`
     );
-    project.images = project.images.map((image) => urlFor(image).url());
+    project.images = await Promise.all(
+        project.images.map(
+            async (image, index) =>
+                await getImageProps(
+                    urlFor(image).url(),
+                    `Image ${index + 1} of project ${project.title}`
+                )
+        )
+    );
 
     const store = initializeStore();
 

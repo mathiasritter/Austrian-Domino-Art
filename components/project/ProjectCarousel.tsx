@@ -42,7 +42,9 @@ const ProjectImageCarousel: React.FC<CarouselProps> = ({
                             key={index}
                             sx={{
                                 position: "relative",
-                                paddingBottom: "min(75%, 100vh)",
+                                display: "flex",
+                                height: "100%",
+                                maxHeight: "100vh",
                                 img: {
                                     objectFit: "contain",
                                 },
