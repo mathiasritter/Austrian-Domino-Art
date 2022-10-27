@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { ButtonBack, ButtonNext, CloseButton } from "./ProjectCarouselButton";
-import { CarouselProvider, Slide, Slider } from "pure-react-carousel";
+import {
+    CarouselContext,
+    CarouselProvider,
+    Slide,
+    Slider,
+} from "pure-react-carousel";
 import { Box } from "@mui/material";
 
 interface CarouselProps {
@@ -21,7 +26,8 @@ const ProjectImageCarousel: React.FC<CarouselProps> = ({
             position: "absolute",
             width: "100%",
             top: "50%",
-            transform: "translateY(-50%)",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
             bgcolor: "background.default",
         }}
     >
@@ -32,6 +38,55 @@ const ProjectImageCarousel: React.FC<CarouselProps> = ({
             totalSlides={items.length}
             isIntrinsicHeight={true}
         >
+            <InnerCarousel
+                items={items}
+                handleClose={handleClose}
+            />
+        </CarouselProvider>
+    </Box>
+);
+
+type InnerCarouselProps = Omit<CarouselProps, "initialImage">;
+
+const InnerCarousel: React.FC<InnerCarouselProps> = ({
+    items,
+    handleClose,
+}) => {
+    const carouselContext = useContext(CarouselContext);
+
+    const escFunction = useCallback((event) => {
+        if (event.key === "Escape") {
+            handleClose();
+            return;
+        }
+
+        const { currentSlide, totalSlides } = carouselContext.state;
+
+        if (event.key === "ArrowRight" && currentSlide < totalSlides - 1) {
+            carouselContext.setStoreState({
+                currentSlide: carouselContext.state.currentSlide + 1,
+            });
+            return;
+        }
+
+        if (event.key === "ArrowLeft" && currentSlide > 0) {
+            carouselContext.setStoreState({
+                currentSlide: carouselContext.state.currentSlide - 1,
+            });
+            return;
+        }
+    }, []);
+
+    useEffect(() => {
+        document.addEventListener("keydown", escFunction);
+
+        return () => {
+            document.removeEventListener("keydown", escFunction);
+        };
+    }, [escFunction]);
+
+    return (
+        <>
             <CloseButton onClick={handleClose} />
             <ButtonBack Icon={KeyboardArrowLeftIcon} />
             <ButtonNext Icon={KeyboardArrowRightIcon} />
@@ -55,8 +110,8 @@ const ProjectImageCarousel: React.FC<CarouselProps> = ({
                     </Slide>
                 ))}
             </Slider>
-        </CarouselProvider>
-    </Box>
-);
+        </>
+    );
+};
 
 export { ProjectImageCarousel };
