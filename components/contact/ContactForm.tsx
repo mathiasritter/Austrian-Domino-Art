@@ -141,7 +141,7 @@ const ContactFormContents = ({
                 color="primary"
                 disabled={isSubmitting || !dirty || !isValid}
             >
-                Submit
+                {isSubmitting ? "Submitting..." : "Submit"}
             </Button>
         </Box>
     </Form>
