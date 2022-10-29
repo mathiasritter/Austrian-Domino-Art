@@ -49,7 +49,7 @@ const Portfolio: NextPage<Props, Props> = ({ project }: Props) => {
                 image={thumbnail.src}
             />
             <PortfolioNavBar />
-            <Section background="paper">
+            <Section background="default">
                 <ProjectGrid>
                     <ProjectTitle>{title}</ProjectTitle>
                     <ProjectVideos videos={videos} title={title} />

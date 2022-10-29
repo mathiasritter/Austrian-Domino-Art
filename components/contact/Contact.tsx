@@ -7,8 +7,9 @@ import NoSsr from "@mui/material/NoSsr";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Image from "next/future/image";
+import { ImageProps } from "../../lib/types";
 
-export const Contact: React.FC = () => (
+export const Contact: React.FC<ImageProps> = (image) => (
     <>
         <Typography variant="h1">Contact</Typography>
         <Typography variant="h4" component="div" gutterBottom>
@@ -31,12 +32,24 @@ export const Contact: React.FC = () => (
                     <ContactForm />
                 </CardContent>
             </Card>
-            <Card sx={{ position: "relative" }}>
+            <Card
+                sx={(theme) => ({
+                    position: "relative",
+                    [theme.breakpoints.down("md")]: {
+                        maxHeight: "500px",
+                    },
+                    [theme.breakpoints.down("sm")]: {
+                        maxHeight: "300px",
+                    },
+                })}
+            >
                 <Image
-                    alt="Multiple colourful domino walls on a prop"
-                    src="https://res.cloudinary.com/austriandominoart/image/upload/c_scale,dpr_auto,f_auto,q_auto:eco,w_1200/general/Dominoes-Walls.jpg"
-                    fill
+                    {...image}
+                    placeholder="blur"
+                    sizes="100vw"
                     style={{
+                        width: "100%",
+                        height: "100%",
                         objectFit: "cover",
                     }}
                 />

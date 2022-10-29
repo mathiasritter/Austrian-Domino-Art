@@ -14,7 +14,6 @@ import { setProjects, setTotal } from "../components/portfolio/portfolioSlice";
 import { sanityClient, urlFor } from "../lib/sanity";
 import groq from "groq";
 import Box from "@mui/material/Box";
-import { getPlaiceholder } from "plaiceholder";
 import { ImageProps } from "../lib/types";
 import { getImageProps } from "../lib/images";
 import { ClientLogo, getClientLogos } from "../lib/transformClientLogos";
@@ -27,12 +26,14 @@ interface PageProps {
         card3Image: ImageProps;
     };
     clientLogos: ClientLogo[];
+    contactImage: ImageProps;
 }
 
 const Index: NextPage<PageProps> = ({
     backgroundImage,
     aboutImages,
     clientLogos,
+    contactImage,
 }) => (
     <>
         <SeoHead
@@ -58,7 +59,7 @@ const Index: NextPage<PageProps> = ({
             <Clients logos={clientLogos} />
         </Section>
         <Section background="default" id="contact">
-            <Contact />
+            <Contact {...contactImage} />
         </Section>
     </>
 );
@@ -152,6 +153,11 @@ const getStaticProps: GetStaticProps<
 
     const clientLogos = await getClientLogos();
 
+    const contactImage = await getImageProps(
+        "https://res.cloudinary.com/austriandominoart/image/upload/general/Dominoes-Walls.jpg",
+        "Multiple colourful domino walls on a prop"
+    );
+
     return {
         props: {
             initialReduxState: store.getState(),
@@ -162,6 +168,7 @@ const getStaticProps: GetStaticProps<
                 card3Image,
             },
             clientLogos,
+            contactImage
         },
         revalidate: 10,
     };
