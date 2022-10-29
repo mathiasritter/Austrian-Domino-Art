@@ -5,7 +5,13 @@ import { Grid } from "./Grid";
 import PortfolioCard from "./PortfolioCard";
 import { scrollToElement } from "../common/scroll";
 import { usePaginatedProjects } from "./usePaginatedProjects";
-import { Box, Hidden, Pagination, Typography, useMediaQuery } from "@mui/material";
+import {
+    Box,
+    Hidden,
+    Pagination,
+    Typography,
+    useMediaQuery,
+} from "@mui/material";
 
 const Portfolio: React.FC = () => {
     const { page, pageCount, setPage, minIndex, maxIndex } =

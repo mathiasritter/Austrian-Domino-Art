@@ -13,8 +13,7 @@ const SectionWrapper: React.FC<PropsWithChildren<SectionWrapperProps>> = ({
     children,
     className,
 }) => {
-    const offset = process.browser
-        // eslint-disable-next-line
+    const offset = process.browser // eslint-disable-next-line
         ? useMemo(() => -(window.innerWidth / 4) - 1, [window.innerWidth])
         : 0;
 

@@ -29,10 +29,7 @@ const DesktopSectionWrapper = styled(SectionWrapper)(({ theme }) => ({
     },
 }));
 
-const DesktopSections: React.FC<DesktopSectionProps> = ({
-    onClick,
-    items,
-}) => (
+const DesktopSections: React.FC<DesktopSectionProps> = ({ onClick, items }) => (
     <DesktopSectionWrapper containerTag="nav" items={items}>
         {items.map((item: string) => (
             <Typography

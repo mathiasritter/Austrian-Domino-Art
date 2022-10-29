@@ -38,10 +38,7 @@ const ProjectImageCarousel: React.FC<CarouselProps> = ({
             totalSlides={items.length}
             isIntrinsicHeight={true}
         >
-            <InnerCarousel
-                items={items}
-                handleClose={handleClose}
-            />
+            <InnerCarousel items={items} handleClose={handleClose} />
         </CarouselProvider>
     </Box>
 );
@@ -54,28 +51,31 @@ const InnerCarousel: React.FC<InnerCarouselProps> = ({
 }) => {
     const carouselContext = useContext(CarouselContext);
 
-    const escFunction = useCallback((event) => {
-        if (event.key === "Escape") {
-            handleClose();
-            return;
-        }
+    const escFunction = useCallback(
+        (event) => {
+            if (event.key === "Escape") {
+                handleClose();
+                return;
+            }
 
-        const { currentSlide, totalSlides } = carouselContext.state;
+            const { currentSlide, totalSlides } = carouselContext.state;
 
-        if (event.key === "ArrowRight" && currentSlide < totalSlides - 1) {
-            carouselContext.setStoreState({
-                currentSlide: carouselContext.state.currentSlide + 1,
-            });
-            return;
-        }
+            if (event.key === "ArrowRight" && currentSlide < totalSlides - 1) {
+                carouselContext.setStoreState({
+                    currentSlide: carouselContext.state.currentSlide + 1,
+                });
+                return;
+            }
 
-        if (event.key === "ArrowLeft" && currentSlide > 0) {
-            carouselContext.setStoreState({
-                currentSlide: carouselContext.state.currentSlide - 1,
-            });
-            return;
-        }
-    }, [carouselContext, handleClose]);
+            if (event.key === "ArrowLeft" && currentSlide > 0) {
+                carouselContext.setStoreState({
+                    currentSlide: carouselContext.state.currentSlide - 1,
+                });
+                return;
+            }
+        },
+        [carouselContext, handleClose]
+    );
 
     useEffect(() => {
         document.addEventListener("keydown", escFunction);

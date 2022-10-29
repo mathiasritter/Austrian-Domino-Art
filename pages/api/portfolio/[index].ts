@@ -43,6 +43,6 @@ const requestHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const project = await getProjectByIndex(parseInt(index));
     res.json(project);
-}
+};
 
 export default requestHandler;

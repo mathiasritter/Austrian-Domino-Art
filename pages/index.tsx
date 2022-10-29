@@ -168,7 +168,7 @@ const getStaticProps: GetStaticProps<
                 card3Image,
             },
             clientLogos,
-            contactImage
+            contactImage,
         },
         revalidate: 10,
     };

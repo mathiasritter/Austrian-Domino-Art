@@ -34,7 +34,6 @@ const SwipeWrapper: React.FC<PropsWithChildren<SwipeProps>> = (
         [setHorizontalSwipe, isHorizontalSwipe]
     );
 
-
     return (
         <>
             {/* @ts-expect-error not updated for React 18 types */}
