@@ -49,7 +49,9 @@ const RecaptchaField = ({
                 theme={isLightTheme ? "light" : "dark"}
             />
             {touched[name] && errors[name] && (
-                <FormHelperText error>{errors[name]}</FormHelperText>
+                <FormHelperText error>
+                    {errors[name].toLocaleString()}
+                </FormHelperText>
             )}
         </>
     );
