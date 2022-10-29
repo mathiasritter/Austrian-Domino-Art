@@ -5,7 +5,7 @@ const clientLogos = [
         alt: "Netflix Logo",
     },
     {
-        slug: "dreamworks-25-years",
+        slug: "dreamworks-25th-anniversary",
         image: "https://res.cloudinary.com/austriandominoart/image/upload/clients/Dreamworks-Logo.png",
         alt: "Dreamworks Logo",
     },
@@ -55,7 +55,7 @@ const clientLogos = [
         alt: "Endemol Logo",
     },
     {
-        slug: "el-hormiguero-kloss-skrein",
+        slug: "el-hormiguero-2",
         image: "https://res.cloudinary.com/austriandominoart/image/upload/clients/Antena3-Logo.png",
         alt: "Antena3 Logo",
     },
