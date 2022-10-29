@@ -3,6 +3,7 @@ import { SectionWrapper } from "./SectionWrapper";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import { styled } from "@mui/material";
 
 const MobileSectionsContainer = ({
     className,
@@ -19,6 +20,16 @@ interface MobileSectionProps {
     items: string[];
 }
 
+const StyledSectionWrapper = styled(SectionWrapper)(({ theme }) => ({
+    "& .active": {
+        backgroundColor: "rgba(255, 255, 255, 0.08)",
+    },
+    "& div": {
+        paddingRight: theme.spacing(2),
+        paddingLeft: theme.spacing(2),
+    },
+}));
+
 const MobileSections: React.FC<MobileSectionProps> = ({
     closeDrawer,
     onClick,
@@ -29,13 +40,16 @@ const MobileSections: React.FC<MobileSectionProps> = ({
         closeDrawer();
     };
     return (
-        <SectionWrapper containerTag={MobileSectionsContainer} items={items}>
+        <StyledSectionWrapper
+            containerTag={MobileSectionsContainer}
+            items={items}
+        >
             {items.map((item: string) => (
                 <ListItem key={item} button onClick={handleClick}>
                     <ListItemText primary={item} />
                 </ListItem>
             ))}
-        </SectionWrapper>
+        </StyledSectionWrapper>
     );
 };
 

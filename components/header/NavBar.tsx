@@ -20,7 +20,7 @@ const NavBar: React.FC<PropsWithChildren> = ({ children }) => {
     return (
         <>
             <Slide appear={false} direction="down" in={showAppBar}>
-                <AppBar enableColorOnDark>
+                <AppBar color="primary" enableColorOnDark>
                     <Toolbar
                         variant={atLeastMd ? "regular" : "dense"}
                         sx={{

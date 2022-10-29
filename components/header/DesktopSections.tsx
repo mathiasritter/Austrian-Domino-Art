@@ -10,6 +10,9 @@ interface DesktopSectionProps {
 
 const DesktopSectionWrapper = styled(SectionWrapper)(({ theme }) => ({
     display: "flex",
+    [theme.breakpoints.down("md")]: {
+        display: "none",
+    },
     alignItems: "center",
     height: "100%",
     "& .active": {

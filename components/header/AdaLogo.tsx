@@ -9,9 +9,9 @@ const AdaLogo: React.FC = () => (
             sx={{
                 cursor: "pointer",
                 display: "flex",
-                height: {
-                    xs: "30px",
-                    md: "40px",
+                width: {
+                    xs: "50px",
+                    md: "70px",
                 },
                 marginRight: {
                     xs: 1,
@@ -22,7 +22,7 @@ const AdaLogo: React.FC = () => (
             <SvgIcon
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 251.05 121.46"
-                sx={{ height: "100%" }}
+                sx={{ height: "100%", width: "100%" }}
             >
                 <rect
                     x="91.2"
