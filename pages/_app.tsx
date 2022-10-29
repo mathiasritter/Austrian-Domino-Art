@@ -58,6 +58,7 @@ const App = ({
 }: AppProps & { err: unknown }) => {
     useScrollRestoration(router);
 
+    // @ts-expect-error pageProps are not typed correctly
     const store = useStore(pageProps.initialReduxState);
 
     useEffect(() => {
