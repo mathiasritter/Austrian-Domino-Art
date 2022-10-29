@@ -30,11 +30,11 @@ const Portfolio: React.FC = () => {
             setPage(newPage);
             scrollToTop();
         },
-        [setPage]
+        [setPage, scrollToTop]
     );
     const paginationSetPage = useCallback(
         (event: React.SyntheticEvent, newPage: number) => swipeSetPage(newPage),
-        [setPage]
+        [swipeSetPage]
     );
 
     return (

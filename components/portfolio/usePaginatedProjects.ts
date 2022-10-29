@@ -12,7 +12,7 @@ const usePaginatedProjects = () => {
 
     const dispatchSetPage = useCallback(
         (newPage: number) => dispatch(setPage(newPage)),
-        [dispatch, setPage]
+        [dispatch]
     );
 
     const atLeastLarge = useMediaQuery((theme: Theme) =>
@@ -29,7 +29,7 @@ const usePaginatedProjects = () => {
             cardsEachPage,
             pageCount,
         };
-    }, [total, atLeastLarge]);
+    }, [total, atLeastLarge, dispatchSetPage, page]);
 
     const { minIndex, maxIndex } = useMemo(() => {
         const minIndex = (page - 1) * cardsEachPage;

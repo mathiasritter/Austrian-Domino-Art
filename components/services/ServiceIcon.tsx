@@ -24,7 +24,7 @@ const ServiceIcon = (props: Props) => {
 
     const innerIconSize = useMemo(
         () => (atLeastMd ? props.iconSize : props.iconSize / 1.5),
-        [atLeastMd]
+        [atLeastMd, props.iconSize]
     );
 
     return (

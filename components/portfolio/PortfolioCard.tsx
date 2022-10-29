@@ -30,7 +30,7 @@ const PortfolioCard: React.FC<Props> = ({ projectIndex }) => {
         if (!project) {
             dispatch(fetchProject(projectIndex));
         }
-    }, [project, projectIndex]);
+    }, [project, projectIndex, dispatch]);
 
     const atLeastSm = useMediaQuery((theme: Theme) =>
         theme.breakpoints.up("sm")

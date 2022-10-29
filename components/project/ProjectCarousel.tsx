@@ -75,7 +75,7 @@ const InnerCarousel: React.FC<InnerCarouselProps> = ({
             });
             return;
         }
-    }, []);
+    }, [carouselContext, handleClose]);
 
     useEffect(() => {
         document.addEventListener("keydown", escFunction);

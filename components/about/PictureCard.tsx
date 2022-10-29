@@ -3,7 +3,6 @@ import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Image from "next/future/image";
 import CardContent from "@mui/material/CardContent";
-import { Box } from "@mui/material";
 import { ImageProps } from "../../lib/types";
 
 interface PictureProps {

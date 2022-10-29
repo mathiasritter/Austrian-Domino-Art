@@ -34,7 +34,7 @@ const getProjectByIndex = async (index: number): Promise<IndexedProject> => {
     };
 };
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const requestHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { index } = req.query;
 
     if (Array.isArray(index) || !Number.isInteger(Number(index))) {
@@ -43,4 +43,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const project = await getProjectByIndex(parseInt(index));
     res.json(project);
-};
+}
+
+export default requestHandler;

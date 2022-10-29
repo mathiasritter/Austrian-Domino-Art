@@ -2,12 +2,6 @@
 /* eslint-disable no-undef */
 const { withPlaiceholder } = require("@plaiceholder/next");
 
-// Use the hidden-source-map option when you don't want the source maps to be
-// publicly available on the servers, only to the error reporting
-const withSourceMaps = require("@zeit/next-source-maps")({
-    devtool: "hidden-source-map",
-});
-
 // Use the SentryWebpack plugin to upload the source maps during build step
 const SentryWebpackPlugin = require("@sentry/webpack-plugin");
 const {
@@ -29,7 +23,7 @@ const COMMIT_SHA =
 process.env.SENTRY_DSN = SENTRY_DSN;
 
 module.exports = withPlaiceholder(
-    withSourceMaps({
+    {
         async redirects() {
             return [
                 {
@@ -91,4 +85,3 @@ module.exports = withPlaiceholder(
             return config;
         },
     })
-);

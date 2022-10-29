@@ -4,13 +4,15 @@
     "scripts": {
         "dev": "next -p 80",
         "build": "next build",
-        "start": "next start -p 80"
+        "start": "next start -p 80",
+        "lint": "next lint"
     },
     "dependencies": {
         "@emotion/cache": "^11.10.3",
         "@emotion/react": "^11.10.4",
         "@emotion/server": "^11.10.0",
         "@emotion/styled": "^11.10.4",
+        "@makotot/ghostui": "^2.0.0",
         "@mui/icons-material": "^5.10.9",
         "@mui/material": "^5.10.10",
         "@plaiceholder/next": "^2.5.0",
@@ -22,7 +24,6 @@
         "@sentry/integrations": "^7.15.0",
         "@sentry/node": "^7.15.0",
         "@sentry/webpack-plugin": "^1.19.1",
-        "@zeit/next-source-maps": "0.0.4-canary.1",
         "formik": "^2.2.9",
         "formik-mui": "^5.0.0-alpha.0",
         "groq": "^2.33.2",
@@ -53,12 +54,9 @@
         "@types/react-google-recaptcha": "^2.1.5",
         "@types/react-scrollspy": "^3.3.5",
         "@types/yup": "^0.29.14",
-        "@typescript-eslint/eslint-plugin": "^5.40.1",
-        "@typescript-eslint/parser": "^5.40.1",
-        "eslint": "^8.25.0",
+        "eslint": "8.26.0",
+        "eslint-config-next": "13.0.0",
         "eslint-config-prettier": "^8.5.0",
-        "eslint-plugin-prettier": "^4.2.1",
-        "eslint-plugin-react": "^7.31.10",
         "prettier": "^2.7.1",
         "typescript": "^4.8.4"
     },
