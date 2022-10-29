@@ -46,6 +46,7 @@ const initStore = (preloadedState: RootState): StoreType => {
     return configureStore({
         reducer: rootReducer,
         middleware,
+        // @ts-expect-error not typed correctly
         preloadedState: preloadedState as DeepPartial<RootState>,
     });
 };
