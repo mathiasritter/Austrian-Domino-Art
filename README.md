@@ -5,6 +5,6 @@ The website is built with [Next.js](https://nextjs.org) and deployed on [Vercel]
 
 ## How to run locally
 
-1. Make sure that [docker](https://www.docker.com/) is installed.
-2. Create a file `secrets.env` in the repository root directory and add variables `RECAPTCHA_SECRET_KEY`, `EMAIL_PASSWORD` and `CLOUDINARY_API_SECRET`.
-3. Run `docker-compose up` and open `127.0.0.1` in a browser.
+1. Create a file `.env.local` in the repository root directory and add variables `RECAPTCHA_SECRET_KEY` and `EMAIL_PASSWORD`.
+2. Run `npm i` to install dependencies.
+3. Run `npm run dev ` and open `127.0.0.1` in a browser.

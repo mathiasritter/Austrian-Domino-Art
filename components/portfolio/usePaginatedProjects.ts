@@ -1,9 +1,9 @@
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { Theme } from "../../theme/theme";
 import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setPage } from "./portfolioSlice";
+import { useMediaQuery } from "@mui/material";
 
 const usePaginatedProjects = () => {
     const total = useSelector((state: RootState) => state.portfolio.total);
@@ -12,7 +12,7 @@ const usePaginatedProjects = () => {
 
     const dispatchSetPage = useCallback(
         (newPage: number) => dispatch(setPage(newPage)),
-        [dispatch, setPage]
+        [dispatch]
     );
 
     const atLeastLarge = useMediaQuery((theme: Theme) =>
@@ -29,7 +29,7 @@ const usePaginatedProjects = () => {
             cardsEachPage,
             pageCount,
         };
-    }, [total, atLeastLarge]);
+    }, [total, atLeastLarge, dispatchSetPage, page]);
 
     const { minIndex, maxIndex } = useMemo(() => {
         const minIndex = (page - 1) * cardsEachPage;

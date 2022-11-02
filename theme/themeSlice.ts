@@ -1,8 +1,8 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
-import { PaletteType } from "@material-ui/core";
+import { PaletteMode } from "@mui/material";
 
 interface ThemeState {
-    type: PaletteType;
+    type: PaletteMode;
 }
 
 const LOCAL_STORAGE_KEY = "theme.type";
@@ -10,7 +10,7 @@ const LOCAL_STORAGE_KEY = "theme.type";
 const getDarkThemeQuery = (): MediaQueryList =>
     window.matchMedia("(prefers-color-scheme: dark)");
 
-const getPreferredThemeType = (): PaletteType =>
+const getPreferredThemeType = (): PaletteMode =>
     process.browser && getDarkThemeQuery().matches ? "dark" : "light";
 
 const readFromLocalStorage = () => {
@@ -20,17 +20,17 @@ const readFromLocalStorage = () => {
     return null;
 };
 
-const saveInLocalStorage = (type: PaletteType) => {
+const saveInLocalStorage = (type: PaletteMode) => {
     if (process.browser) {
         localStorage.setItem(LOCAL_STORAGE_KEY, type);
     }
 };
 
-const initialThemeType = (): PaletteType => {
+const initialThemeType = (): PaletteMode => {
     const savedType = readFromLocalStorage();
 
     if (["light", "dark"].includes(savedType)) {
-        return savedType as PaletteType;
+        return savedType as PaletteMode;
     }
 
     const initialType = getPreferredThemeType();
@@ -57,7 +57,7 @@ const themeSlice = createSlice({
     reducers: {
         setType: (
             state: Draft<ThemeState>,
-            action: PayloadAction<PaletteType>
+            action: PayloadAction<PaletteMode>
         ) => {
             state.type = action.payload;
             saveInLocalStorage(state.type);

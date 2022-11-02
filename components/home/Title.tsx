@@ -1,32 +1,25 @@
-import { Theme } from "../../theme/theme";
-import { createStyles, Typography, withStyles } from "@material-ui/core";
-import React from "react";
-import { PropsWithStylesAndChildren } from "../../theme/styleTypes";
+import React, { PropsWithChildren } from "react";
+import Typography from "@mui/material/Typography";
 
 interface TitleProps {
     variant: "h1" | "h2" | "h3";
 }
 
-const titleStyles = (theme: Theme) =>
-    createStyles({
-        root: {
-            "z-index": "inherit",
+const Title: React.FC<PropsWithChildren<TitleProps>> = ({
+    children,
+    variant,
+}) => (
+    <Typography
+        variant={variant}
+        sx={{
+            zIndex: "inherit",
             color: "#FFFFFF",
             textAlign: "center",
             fontWeight: "bold",
-        },
-    });
-
-const Title = withStyles(titleStyles)(
-    ({
-        variant,
-        classes,
-        children,
-    }: PropsWithStylesAndChildren<TitleProps>) => (
-        <Typography variant={variant} className={classes.root}>
-            {children}
-        </Typography>
-    )
+        }}
+    >
+        {children}
+    </Typography>
 );
 
 export { Title };

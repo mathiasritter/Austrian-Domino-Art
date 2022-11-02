@@ -1,22 +1,40 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import About from "../components/about/About";
 import Clients from "../components/clients/Clients";
 import Contact from "../components/contact/Contact";
 import { Home } from "../components/home/Home";
 import Portfolio from "../components/portfolio/Portfolio";
 import Services from "../components/services/Services";
-import { Container, createStyles, withStyles } from "@material-ui/core";
+import Container from "@mui/material/Container";
 import { HomeNavBar } from "../components/header/HomeNavBar";
 import { SeoHead } from "../components/head/SeoHead";
 import { GetStaticProps, NextPage } from "next";
 import { initializeStore, InitialReduxStateProps } from "../store";
 import { setProjects, setTotal } from "../components/portfolio/portfolioSlice";
-import { Theme } from "../theme/theme";
-import { PropsWithStylesAndChildren } from "../theme/styleTypes";
-import { sanityClient } from "../lib/sanity";
+import { sanityClient, urlFor } from "../lib/sanity";
 import groq from "groq";
+import Box from "@mui/material/Box";
+import { ImageProps } from "../lib/types";
+import { getImageProps } from "../lib/images";
+import { ClientLogo, getClientLogos } from "../lib/transformClientLogos";
 
-const Index: NextPage = () => (
+interface PageProps {
+    backgroundImage: ImageProps;
+    aboutImages: {
+        card1Image: ImageProps;
+        card2Image: ImageProps;
+        card3Image: ImageProps;
+    };
+    clientLogos: ClientLogo[];
+    contactImage: ImageProps;
+}
+
+const Index: NextPage<PageProps> = ({
+    backgroundImage,
+    aboutImages,
+    clientLogos,
+    contactImage,
+}) => (
     <>
         <SeoHead
             title="Austrian Domino Art - Professional Domino Toppling"
@@ -26,60 +44,60 @@ const Index: NextPage = () => (
         />
         <HomeNavBar />
         <section id="home">
-            <Home />
+            <Home {...backgroundImage} />
         </section>
-        <GreySection id="portfolio">
+        <Section background="default" id="portfolio">
             <Portfolio />
-        </GreySection>
-        <WhiteSection id="services">
+        </Section>
+        <Section background="paper" id="services">
             <Services />
-        </WhiteSection>
-        <GreySection id="about">
-            <About />
-        </GreySection>
-        <WhiteSection id="clients">
-            <Clients />
-        </WhiteSection>
-        <GreySection id="contact">
-            <Contact />
-        </GreySection>
+        </Section>
+        <Section background="default" id="about">
+            <About {...aboutImages} />
+        </Section>
+        <Section background="paper" id="clients">
+            <Clients logos={clientLogos} />
+        </Section>
+        <Section background="default" id="contact">
+            <Contact {...contactImage} />
+        </Section>
     </>
 );
 
-const Section: React.FC<PropsWithStylesAndChildren<{ id?: string }>> = (
-    props: PropsWithStylesAndChildren<{ id?: string }>
-) => (
-    <section id={props.id} className={props.classes.root}>
-        <Container maxWidth="xl">{props.children}</Container>
-    </section>
+interface SectionProps {
+    id?: string;
+    background: "default" | "paper";
+}
+
+const Section: React.FC<PropsWithChildren<SectionProps>> = ({
+    id,
+    background,
+    children,
+}) => (
+    <Box
+        component="section"
+        id={id}
+        sx={{
+            bgcolor: `background.${background}`,
+            paddingTop: {
+                xs: 8.5,
+                sm: 9.5,
+                md: 11,
+            },
+            paddingBottom: {
+                xs: 8.5,
+                sm: 9.5,
+                md: 11,
+            },
+        }}
+    >
+        <Container maxWidth="xl">{children}</Container>
+    </Box>
 );
 
-const makeSectionStyles = (background: "default" | "paper") => (theme: Theme) =>
-    createStyles({
-        root: {
-            background: theme.palette.background[background],
-            [theme.breakpoints.up("md")]: {
-                paddingTop: theme.spacing(11),
-                paddingBottom: theme.spacing(11),
-            },
-            [theme.breakpoints.only("sm")]: {
-                paddingTop: theme.spacing(9.5),
-                paddingBottom: theme.spacing(9.5),
-            },
-            [theme.breakpoints.down("xs")]: {
-                paddingTop: theme.spacing(8.5),
-                paddingBottom: theme.spacing(8.5),
-            },
-        },
-    });
-
-const whiteSectionStyles = makeSectionStyles("paper");
-const greySectionStyles = makeSectionStyles("default");
-
-const WhiteSection = withStyles(whiteSectionStyles)(Section);
-const GreySection = withStyles(greySectionStyles)(Section);
-
-const getStaticProps: GetStaticProps<InitialReduxStateProps> = async () => {
+const getStaticProps: GetStaticProps<
+    InitialReduxStateProps & PageProps
+> = async () => {
     const store = initializeStore();
 
     const totalResult = await sanityClient.fetch(groq`
@@ -100,16 +118,61 @@ const getStaticProps: GetStaticProps<InitialReduxStateProps> = async () => {
           }
         }
     `);
-    const projects = projectsResult.projects;
+
+    const projects = await Promise.all(
+        projectsResult.projects.map(async (project) => {
+            const thumbnail = await getImageProps(
+                urlFor(project.thumbnail).url(),
+                `Thumbnail for ${project.title}`
+            );
+            return {
+                ...project,
+                thumbnail,
+            };
+        })
+    );
+
     store.dispatch(setProjects(projects));
+
+    const backgroundImage = await getImageProps(
+        "https://res.cloudinary.com/austriandominoart/image/upload/general/AustrianDominoArt-BG.jpg",
+        "red and white dominoes showing the Austrian Domino Art logo"
+    );
+    const card1Image = await getImageProps(
+        "https://res.cloudinary.com/austriandominoart/image/upload/general/Dominoes-Structures.jpg",
+        "Various domino structures on a table"
+    );
+    const card2Image = await getImageProps(
+        "https://res.cloudinary.com/austriandominoart/image/upload/general/Dominoes-Pile.jpg",
+        "A pile of white and golden dominoes"
+    );
+    const card3Image = await getImageProps(
+        "https://res.cloudinary.com/austriandominoart/image/upload/general/Dominoes-Dog.jpg",
+        "A dog who watches dominoes toppling"
+    );
+
+    const clientLogos = await getClientLogos();
+
+    const contactImage = await getImageProps(
+        "https://res.cloudinary.com/austriandominoart/image/upload/general/Dominoes-Walls.jpg",
+        "Multiple colourful domino walls on a prop"
+    );
 
     return {
         props: {
             initialReduxState: store.getState(),
+            backgroundImage,
+            aboutImages: {
+                card1Image,
+                card2Image,
+                card3Image,
+            },
+            clientLogos,
+            contactImage,
         },
         revalidate: 10,
     };
 };
 
 export default Index;
-export { GreySection, getStaticProps };
+export { getStaticProps, Section };

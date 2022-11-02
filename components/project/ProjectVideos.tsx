@@ -1,8 +1,7 @@
-import { Box, Card } from "@material-ui/core";
 import React from "react";
-import { Theme } from "../../theme/theme";
-import { createDiv } from "../common/createDiv";
 import { LazyVideo } from "../common/LazyVideo";
+import { Card, styled } from "@mui/material";
+import { Box } from "@mui/system";
 
 interface ProjectVideosProps {
     videos: string[];
@@ -38,7 +37,7 @@ const ProjectVideos: React.FC<ProjectVideosProps> = ({
     );
 };
 
-const VideoGrid = createDiv((theme: Theme) => ({
+const VideoGrid = styled("div")(({ theme }) => ({
     display: "grid",
     gridGap: theme.spacing(2),
     [theme.breakpoints.up("lg")]: {

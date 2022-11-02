@@ -1,5 +1,5 @@
 import { Field, Form, Formik, FormikProps } from "formik";
-import { TextField } from "formik-material-ui";
+import { TextField } from "formik-mui";
 import React from "react";
 import * as Yup from "yup";
 import { RecaptchaField } from "./RecaptchaField";
@@ -9,7 +9,8 @@ import {
     BaseNotification,
 } from "../notification/notificationSlice";
 import { sendContactMessage } from "./contactApi";
-import { Box, Button } from "@material-ui/core";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
 export interface ContactFormValues {
     name: string;
@@ -140,7 +141,7 @@ const ContactFormContents = ({
                 color="primary"
                 disabled={isSubmitting || !dirty || !isValid}
             >
-                Submit
+                {isSubmitting ? "Submitting..." : "Submit"}
             </Button>
         </Box>
     </Form>

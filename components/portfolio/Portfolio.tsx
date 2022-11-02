@@ -1,21 +1,21 @@
 import React, { useCallback, useMemo } from "react";
 import { Theme } from "../../theme/theme";
-import { Box, Hidden, Typography, useMediaQuery } from "@material-ui/core";
 import { SwipeWrapper } from "./SwipeWrapper";
 import { Grid } from "./Grid";
 import PortfolioCard from "./PortfolioCard";
 import { scrollToElement } from "../common/scroll";
 import { usePaginatedProjects } from "./usePaginatedProjects";
-import { Pagination } from "@material-ui/lab";
+import {
+    Box,
+    Hidden,
+    Pagination,
+    Typography,
+    useMediaQuery,
+} from "@mui/material";
 
 const Portfolio: React.FC = () => {
-    const {
-        page,
-        pageCount,
-        setPage,
-        minIndex,
-        maxIndex,
-    } = usePaginatedProjects();
+    const { page, pageCount, setPage, minIndex, maxIndex } =
+        usePaginatedProjects();
 
     const projects = useMemo(() => {
         const projects = [];
@@ -36,11 +36,11 @@ const Portfolio: React.FC = () => {
             setPage(newPage);
             scrollToTop();
         },
-        [setPage]
+        [setPage, scrollToTop]
     );
     const paginationSetPage = useCallback(
         (event: React.SyntheticEvent, newPage: number) => swipeSetPage(newPage),
-        [setPage]
+        [swipeSetPage]
     );
 
     return (

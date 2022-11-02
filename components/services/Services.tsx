@@ -1,10 +1,10 @@
 import React from "react";
 import ServiceCard from "./ServiceCard";
-import { Typography } from "@material-ui/core";
-import GroupIcon from "@material-ui/icons/Group";
-import VideocamIcon from "@material-ui/icons/Videocam";
-import TvIcon from "@material-ui/icons/Tv";
+import GroupIcon from "@mui/icons-material/Group";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import TvIcon from "@mui/icons-material/Tv";
 import { ServiceGrid } from "./ServiceGrid";
+import { Typography } from "@mui/material";
 
 const Services: React.FC = () => (
     <>

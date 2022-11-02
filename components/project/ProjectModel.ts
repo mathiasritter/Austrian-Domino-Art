@@ -1,3 +1,5 @@
+import { ImageProps } from "../../lib/types";
+
 export enum ProjectCategory {
     ADVERTISEMENT = "Advertisement",
     WORKSHOP = "Workshop",
@@ -8,7 +10,7 @@ export interface BaseProject {
     title: string;
     slug: string;
     summary: string;
-    thumbnail: string;
+    thumbnail: ImageProps;
 }
 
 export interface IndexedProject extends BaseProject {
@@ -18,6 +20,6 @@ export interface IndexedProject extends BaseProject {
 export interface FullProject extends BaseProject {
     categories: string[];
     description: string;
-    images: string[];
+    images: ImageProps[];
     videos?: string[];
 }

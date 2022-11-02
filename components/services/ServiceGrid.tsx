@@ -1,7 +1,6 @@
-import { createDiv } from "../common/createDiv";
-import { Theme } from "../../theme/theme";
+import { styled } from "@mui/system";
 
-const ServiceGrid = createDiv((theme: Theme) => ({
+const ServiceGrid = styled("div")(({ theme }) => ({
     display: "grid",
     gridGap: theme.spacing(2),
     [theme.breakpoints.up("md")]: {

@@ -1,12 +1,9 @@
-import { Theme } from "../../theme/theme";
-import { createStyles, withStyles } from "@material-ui/core";
+import React from "react";
 import { CustomCard } from "../common/CustomCard";
+import { styled } from "@mui/system";
 
-const brightCardStyles = (theme: Theme) =>
-    createStyles({
-        root: { backgroundColor: theme.palette.action.focus },
-    });
-
-const BrightCard = withStyles(brightCardStyles)(CustomCard);
+const BrightCard = styled(CustomCard)(({ theme }) => ({
+    backgroundColor: theme.palette.action.focus,
+}));
 
 export { BrightCard };

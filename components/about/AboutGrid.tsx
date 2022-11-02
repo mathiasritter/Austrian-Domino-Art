@@ -1,7 +1,6 @@
-import { Theme } from "../../theme/theme";
-import { createDiv } from "../common/createDiv";
+import { styled } from "@mui/system";
 
-const AboutGrid = createDiv((theme: Theme) => ({
+const AboutGrid = styled("div")(({ theme }) => ({
     display: "grid",
     gridGap: theme.spacing(2),
     [theme.breakpoints.up("lg")]: {
@@ -28,7 +27,7 @@ const AboutGrid = createDiv((theme: Theme) => ({
             "card2 card3"
         `,
     },
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down("sm")]: {
         gridTemplateColumns: "repeat(2, 1fr)",
         gridTemplateAreas: `
             "logo stat1"

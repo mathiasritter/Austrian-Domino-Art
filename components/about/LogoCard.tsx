@@ -1,68 +1,43 @@
 import { Logo } from "./Logo";
 import React from "react";
-import { Theme } from "../../theme/theme";
-import {
-    Card,
-    CardContent,
-    createStyles,
-    withStyles,
-    makeStyles,
-} from "@material-ui/core";
-import { PropsWithStyles } from "../../theme/styleTypes";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 
 interface LogoCardProps {
     gridArea: string;
 }
 
-const logoCardStyles = (theme: Theme) =>
-    createStyles({
-        root: {
+const LogoCard: React.FC<LogoCardProps> = ({ gridArea }) => (
+    <Card
+        sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-        },
-        content: {
-            height: "100%",
-            width: "100%",
-            [theme.breakpoints.up("xl")]: {
-                maxWidth: "400px",
-            },
-            [theme.breakpoints.only("lg")]: {
-                maxWidth: "300px",
-            },
-            [theme.breakpoints.only("md")]: {
-                maxWidth: "400px",
-            },
-            [theme.breakpoints.only("sm")]: {
-                maxWidth: "225px",
-            },
-            [theme.breakpoints.only("xs")]: {
-                maxWidth: "175px",
-            },
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            "&:last-child": {
-                paddingBottom: theme.spacing(2),
-            },
-        },
-    });
-
-const LogoCard = withStyles(logoCardStyles)(
-    ({
-        classes,
-        gridArea,
-    }: PropsWithStyles<LogoCardProps, typeof logoCardStyles>) => {
-        const { root } = makeStyles({ root: { gridArea } })();
-
-        return (
-            <Card className={classes.root + " " + root}>
-                <CardContent className={classes.content}>
-                    <Logo />
-                </CardContent>
-            </Card>
-        );
-    }
+            gridArea,
+        }}
+    >
+        <CardContent
+            sx={{
+                height: "100%",
+                width: "100%",
+                maxWidth: {
+                    xs: "175px",
+                    sm: "225px",
+                    md: "400px",
+                    lg: "300px",
+                    xl: "400px",
+                },
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                "&:last-child": {
+                    paddingBottom: 2,
+                },
+            }}
+        >
+            <Logo />
+        </CardContent>
+    </Card>
 );
 
 export { LogoCard };

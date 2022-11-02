@@ -17,7 +17,7 @@ const mailSender = nodemailer.createTransport({
     },
 });
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const requestHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const data: ContactFormValues = JSON.parse(req.body);
 
@@ -52,3 +52,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         res.json({ message: err.message });
     }
 };
+
+export default requestHandler;

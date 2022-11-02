@@ -1,8 +1,6 @@
 import React from "react";
-import { createStyles, Modal, withStyles } from "@material-ui/core";
-import { Theme } from "../../theme/theme";
-import { PropsWithStyles } from "../../theme/styleTypes";
 import { ProjectImageCarousel } from "./ProjectCarousel";
+import { Modal } from "@mui/material";
 
 interface ProjectImageListProps {
     imageElements: JSX.Element[];
@@ -11,34 +9,24 @@ interface ProjectImageListProps {
     initialImage: number;
 }
 
-const projectImageModalStyles = (theme: Theme) =>
-    createStyles({
-        root: {
-            touchAction: "none",
-        },
-    });
-
-const ProjectCarouselModal = withStyles(projectImageModalStyles)(
-    ({
-        imageElements,
-        open,
-        handleClose,
-        initialImage,
-        classes,
-    }: PropsWithStyles<ProjectImageListProps>) => (
-        <Modal
-            className={classes.root}
-            open={open}
-            onClose={handleClose}
-            aria-label="Photo gallery"
-        >
-            <ProjectImageCarousel
-                items={imageElements}
-                handleClose={handleClose}
-                initialImage={initialImage}
-            />
-        </Modal>
-    )
+const ProjectCarouselModal: React.FC<ProjectImageListProps> = ({
+    imageElements,
+    open,
+    handleClose,
+    initialImage,
+}) => (
+    <Modal
+        sx={{ touchAction: "none" }}
+        open={open}
+        onClose={handleClose}
+        aria-label="Photo gallery"
+    >
+        <ProjectImageCarousel
+            items={imageElements}
+            handleClose={handleClose}
+            initialImage={initialImage}
+        />
+    </Modal>
 );
 
 export { ProjectCarouselModal };

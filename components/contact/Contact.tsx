@@ -1,10 +1,15 @@
 import React from "react";
-import { Card, CardContent, Link, NoSsr, Typography } from "@material-ui/core";
 import { ContactForm } from "./ContactForm";
-import { LazyContactImage } from "./LazyContactImage";
 import { ContactGrid } from "./ContactGrid";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import NoSsr from "@mui/material/NoSsr";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Image from "next/future/image";
+import { ImageProps } from "../../lib/types";
 
-export const Contact: React.FC = () => (
+export const Contact: React.FC<ImageProps> = (image) => (
     <>
         <Typography variant="h1">Contact</Typography>
         <Typography variant="h4" component="div" gutterBottom>
@@ -27,10 +32,26 @@ export const Contact: React.FC = () => (
                     <ContactForm />
                 </CardContent>
             </Card>
-            <Card>
-                <LazyContactImage
-                    src="https://res.cloudinary.com/austriandominoart/image/upload/c_scale,dpr_auto,f_auto,q_auto:eco,w_1200/general/Dominoes-Walls.jpg"
-                    alt="Colourful domino walls"
+            <Card
+                sx={(theme) => ({
+                    position: "relative",
+                    [theme.breakpoints.down("md")]: {
+                        maxHeight: "500px",
+                    },
+                    [theme.breakpoints.down("sm")]: {
+                        maxHeight: "300px",
+                    },
+                })}
+            >
+                <Image
+                    {...image}
+                    placeholder="blur"
+                    sizes="100vw"
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                    }}
                 />
             </Card>
         </ContactGrid>

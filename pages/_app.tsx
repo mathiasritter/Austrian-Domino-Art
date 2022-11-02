@@ -1,10 +1,9 @@
 import { AppProps } from "next/app";
-import Head from "next/head";
 import Router from "next/router";
 import NProgress from "nprogress";
 import React, { useEffect } from "react";
 import smoothscroll from "smoothscroll-polyfill";
-import { CssBaseline } from "@material-ui/core";
+import CssBaseline from "@mui/material/CssBaseline";
 import { useStore } from "../store";
 import { Provider } from "react-redux";
 import useScrollRestoration from "../hooks/useScrollRestoration";
@@ -37,7 +36,6 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
 
 // kick off the polyfill!
 if (process.browser) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     window.__forceSmoothScrollPolyfill__ = true;
     // always forcing polyfill because of problems with the nav drawer
@@ -60,6 +58,7 @@ const App = ({
 }: AppProps & { err: unknown }) => {
     useScrollRestoration(router);
 
+    // @ts-expect-error pageProps are not typed correctly
     const store = useStore(pageProps.initialReduxState);
 
     useEffect(() => {
@@ -72,21 +71,13 @@ const App = ({
     // Passing err to Component:
     // Workaround for https://github.com/vercel/next.js/issues/8592
     return (
-        <>
-            <Head>
-                <meta
-                    name="viewport"
-                    content="minimum-scale=1, initial-scale=1, width=device-width"
-                />
-            </Head>
-            <Provider store={store}>
-                <ThemeWrapper>
-                    <CssBaseline />
-                    <Component {...pageProps} err={err} />
-                    <Notifications />
-                </ThemeWrapper>
-            </Provider>
-        </>
+        <Provider store={store}>
+            <ThemeWrapper>
+                <CssBaseline />
+                <Component {...pageProps} err={err} />
+                <Notifications />
+            </ThemeWrapper>
+        </Provider>
     );
 };
 

@@ -1,10 +1,16 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
 import { ClientsGrid } from "./ClientsGrid";
-import { clientCards } from "./ClientCard";
+import { ClientCard } from "./ClientCard";
 import { ClientVideo } from "./ClientVideo";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import { ClientLogo } from "../../lib/transformClientLogos";
 
-const Clients: React.FC = () => (
+interface Props {
+    logos: ClientLogo[];
+}
+
+const Clients: React.FC<Props> = ({ logos }) => (
     <>
         <Typography variant="h1">Clients</Typography>
         <Box fontStyle="italic">
@@ -14,7 +20,24 @@ const Clients: React.FC = () => (
             </Typography>
         </Box>
         <ClientsGrid>
-            {clientCards}
+            {logos.map(({ slug, image }, index) => {
+                let className = "";
+                if (index >= 8 && index < 10) {
+                    className = "hidden-md-down";
+                }
+                if (index >= 10) {
+                    className = "hidden-lg-down";
+                }
+                return (
+                    <ClientCard
+                        key={slug}
+                        className={className}
+                        gridArea={slug}
+                        image={image}
+                        slug={slug}
+                    />
+                );
+            })}
             <ClientVideo />
         </ClientsGrid>
     </>
