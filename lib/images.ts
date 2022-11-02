@@ -5,7 +5,7 @@ const getImageProps = async (src: string, alt: string): Promise<ImageProps> => {
     const {
         base64,
         img: { width, height },
-    } = await getPlaiceholder(src);
+    } = await getPlaiceholder(src, { size: 30 });
 
     return {
         src,
