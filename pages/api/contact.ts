@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nodemailer from "nodemailer";
 import fetch from "isomorphic-unfetch";
-import { ContactFormValues } from "../../components/contact/ContactForm";
+import { ContactFormSchema } from "../../components/contact/ContactForm";
 
 if (!(process.env.EMAIL_PASSWORD && process.env.RECAPTCHA_SECRET_KEY)) {
     console.error("Required secrets not set as environment variables!");
@@ -19,7 +19,7 @@ const mailSender = nodemailer.createTransport({
 
 const requestHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-        const data: ContactFormValues = JSON.parse(req.body);
+        const data: ContactFormSchema = req.body;
 
         // verify captcha
         const secretKey = process.env.RECAPTCHA_SECRET_KEY;

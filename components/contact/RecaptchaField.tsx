@@ -1,59 +1,47 @@
-import { FieldProps } from "formik";
 import React, { useCallback } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
-import Skeleton from "@mui/material/Skeleton";
 import FormHelperText from "@mui/material/FormHelperText";
+import { useTheme } from "@mui/system";
+import { FormControl } from "@mui/material";
 
-const RecaptchaSkeleton: React.FC = () => (
-    <Skeleton
-        variant="rectangular"
-        sx={{ height: "74px", width: "100%", maxWidth: "300px" }}
-    />
-);
+interface Props {
+    onChange: (value: string) => void;
+    setError: (error: string) => void;
+    error?: string;
+}
 
-const RecaptchaField = ({
-    form: { setFieldValue, setFieldError, setFieldTouched, touched, errors },
-    field: { name },
-}: FieldProps) => {
-    const isLightTheme = useSelector(
-        (state: RootState) => state.theme.type === "light"
-    );
+const RecaptchaField: React.FC<Props> = ({ setError, onChange, error }) => {
+    const theme = useTheme();
+    const themeMode = theme.palette.mode;
 
-    const onChange = useCallback(
+    const onRecaptchaChange = useCallback(
         (value: string | null) => {
-            setFieldTouched(name);
-            setFieldValue(name, value ?? "");
+            onChange(value ?? "");
         },
-        [setFieldValue, setFieldTouched, name]
+        [onChange]
     );
 
     const onExpired = useCallback(() => {
-        setFieldError(name, "Captcha expired, please tick again");
-        setFieldValue(name, "");
-    }, [setFieldError, setFieldValue, name]);
+        setError("Captcha expired, please tick again");
+    }, [setError]);
 
     const onErrored = useCallback(
-        () => setFieldError(name, "Captcha errored, please try again"),
-        [setFieldError, name]
+        () => setError("Captcha errored, please try again"),
+        [setError]
     );
 
     return (
-        <>
+        <FormControl>
             <ReCAPTCHA
                 sitekey="6LctLokUAAAAANg8kc9_bNTcFr8882wp6NhOmhO3"
-                onChange={onChange}
+                onChange={onRecaptchaChange}
                 onErrored={onErrored}
                 onExpired={onExpired}
-                theme={isLightTheme ? "light" : "dark"}
+                theme={themeMode}
+                key={themeMode}
             />
-            {touched[name] && errors[name] && (
-                <FormHelperText error>
-                    {errors[name].toLocaleString()}
-                </FormHelperText>
-            )}
-        </>
+            {error && <FormHelperText error>{error}</FormHelperText>}
+        </FormControl>
     );
 };
 

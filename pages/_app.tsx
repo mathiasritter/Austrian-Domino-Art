@@ -8,11 +8,15 @@ import { useStore } from "../store";
 import { Provider } from "react-redux";
 import useScrollRestoration from "../hooks/useScrollRestoration";
 import { ThemeWrapper } from "../theme/ThemeWrapper";
-import { Notifications } from "../components/notification/Notifications";
 import * as Sentry from "@sentry/node";
 import { RewriteFrames } from "@sentry/integrations";
 import getConfig from "next/config";
 import "pure-react-carousel/dist/react-carousel.es.css";
+import { QueryClient } from "@tanstack/query-core";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { SnackbarProvider } from "notistack";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
     const config = getConfig();
@@ -50,6 +54,8 @@ Router.events.on("routeChangeStart", (url) => {
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
 
+const queryClient = new QueryClient();
+
 const App = ({
     Component,
     pageProps,
@@ -68,15 +74,34 @@ const App = ({
         }
     }, []);
 
+    const myRef = React.useRef<SnackbarProvider>(null);
+
     // Passing err to Component:
     // Workaround for https://github.com/vercel/next.js/issues/8592
     return (
         <Provider store={store}>
-            <ThemeWrapper>
-                <CssBaseline />
-                <Component {...pageProps} err={err} />
-                <Notifications />
-            </ThemeWrapper>
+            <QueryClientProvider client={queryClient}>
+                <ThemeWrapper>
+                    <CssBaseline />
+                    <SnackbarProvider
+                        ref={myRef}
+                        action={(snackbarId) => (
+                            <IconButton
+                                size="small"
+                                aria-label="close"
+                                color="inherit"
+                                onClick={() =>
+                                    myRef.current.closeSnackbar(snackbarId)
+                                }
+                            >
+                                <CloseIcon fontSize="small" />
+                            </IconButton>
+                        )}
+                    >
+                        <Component {...pageProps} err={err} />
+                    </SnackbarProvider>
+                </ThemeWrapper>
+            </QueryClientProvider>
         </Provider>
     );
 };
