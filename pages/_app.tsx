@@ -4,10 +4,7 @@ import NProgress from "nprogress";
 import React, { useEffect } from "react";
 import smoothscroll from "smoothscroll-polyfill";
 import CssBaseline from "@mui/material/CssBaseline";
-import { useStore } from "../store";
-import { Provider } from "react-redux";
 import useScrollRestoration from "../hooks/useScrollRestoration";
-import { ThemeWrapper } from "../theme/ThemeWrapper";
 import * as Sentry from "@sentry/node";
 import { RewriteFrames } from "@sentry/integrations";
 import getConfig from "next/config";
@@ -17,6 +14,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { SnackbarProvider } from "notistack";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/styles";
+import { theme } from "../theme/theme";
 
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
     const config = getConfig();
@@ -64,9 +63,6 @@ const App = ({
 }: AppProps & { err: unknown }) => {
     useScrollRestoration(router);
 
-    // @ts-expect-error pageProps are not typed correctly
-    const store = useStore(pageProps.initialReduxState);
-
     useEffect(() => {
         const jssStyles = document.querySelector("#jss-server-side");
         if (jssStyles) {
@@ -79,30 +75,28 @@ const App = ({
     // Passing err to Component:
     // Workaround for https://github.com/vercel/next.js/issues/8592
     return (
-        <Provider store={store}>
-            <QueryClientProvider client={queryClient}>
-                <ThemeWrapper>
-                    <CssBaseline />
-                    <SnackbarProvider
-                        ref={myRef}
-                        action={(snackbarId) => (
-                            <IconButton
-                                size="small"
-                                aria-label="close"
-                                color="inherit"
-                                onClick={() =>
-                                    myRef.current.closeSnackbar(snackbarId)
-                                }
-                            >
-                                <CloseIcon fontSize="small" />
-                            </IconButton>
-                        )}
-                    >
-                        <Component {...pageProps} err={err} />
-                    </SnackbarProvider>
-                </ThemeWrapper>
-            </QueryClientProvider>
-        </Provider>
+        <QueryClientProvider client={queryClient}>
+            <CssVarsProvider theme={theme}>
+                <CssBaseline />
+                <SnackbarProvider
+                    ref={myRef}
+                    action={(snackbarId) => (
+                        <IconButton
+                            size="small"
+                            aria-label="close"
+                            color="inherit"
+                            onClick={() =>
+                                myRef.current.closeSnackbar(snackbarId)
+                            }
+                        >
+                            <CloseIcon fontSize="small" />
+                        </IconButton>
+                    )}
+                >
+                    <Component {...pageProps} err={err} />
+                </SnackbarProvider>
+            </CssVarsProvider>
+        </QueryClientProvider>
     );
 };
 

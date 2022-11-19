@@ -18,7 +18,11 @@ const About: React.FC<AboutProps> = ({
     card3Image,
 }) => (
     <>
-        <Typography variant="h1" gutterBottom>
+        <Typography
+            variant="h1"
+            gutterBottom
+            sx={{ color: "primary.main", fontWeight: "bold" }}
+        >
             About
         </Typography>
         <AboutGrid>

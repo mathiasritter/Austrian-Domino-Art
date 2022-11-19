@@ -1,23 +1,32 @@
-import { RootState } from "../../store";
-import { toggleThemeType } from "../../theme/themeSlice";
-import { useSelector } from "react-redux";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import React, { useMemo } from "react";
-import { useAction } from "../../hooks/useAction";
+import React, { useCallback, useMemo } from "react";
 import { WhiteIconButton } from "../common/WhiteIconButton";
+import { useColorScheme } from "@mui/material/styles";
 
 const ToggleTheme: React.FC = () => {
-    const toggleTheme = useAction(toggleThemeType());
+    const { mode, setMode } = useColorScheme();
 
-    const isLightTheme = useSelector(
-        (state: RootState) => state.theme.type === "light"
-    );
+    const toggleTheme = useCallback(() => {
+        setMode(mode === "light" ? "dark" : "light");
+    }, [mode]);
 
     const icon = useMemo(
-        () => (isLightTheme ? <Brightness4Icon /> : <Brightness7Icon />),
-        [isLightTheme]
+        () => (mode === "light" ? <Brightness4Icon /> : <Brightness7Icon />),
+        [mode]
     );
+
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) {
+        // for server-side rendering
+        // learn more at https://github.com/pacocoursey/next-themes#avoid-hydration-mismatch
+        return null;
+    }
 
     return (
         <WhiteIconButton

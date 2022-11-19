@@ -11,7 +11,12 @@ import { ImageProps } from "../../lib/types";
 
 export const Contact: React.FC<ImageProps> = (image) => (
     <>
-        <Typography variant="h1">Contact</Typography>
+        <Typography
+            variant="h1"
+            sx={{ color: "primary.main", fontWeight: "bold" }}
+        >
+            Contact
+        </Typography>
         <Typography variant="h4" component="div" gutterBottom>
             Do you have a big idea we can help with?
         </Typography>

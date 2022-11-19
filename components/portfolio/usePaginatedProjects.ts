@@ -1,19 +1,9 @@
 import { Theme } from "../../theme/theme";
-import { useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { setPage } from "./portfolioSlice";
+import { useMemo, useState } from "react";
 import { useMediaQuery } from "@mui/material";
 
-const usePaginatedProjects = () => {
-    const total = useSelector((state: RootState) => state.portfolio.total);
-    const page = useSelector((state: RootState) => state.portfolio.page);
-    const dispatch = useDispatch();
-
-    const dispatchSetPage = useCallback(
-        (newPage: number) => dispatch(setPage(newPage)),
-        [dispatch]
-    );
+const usePaginatedProjects = (total: number) => {
+    const [page, setPage] = useState(1);
 
     const atLeastLarge = useMediaQuery((theme: Theme) =>
         theme.breakpoints.up("lg")
@@ -23,13 +13,13 @@ const usePaginatedProjects = () => {
         const cardsEachPage = atLeastLarge ? 8 : 6;
         const pageCount = Math.max(Math.ceil(total / cardsEachPage), 1);
         if (page > pageCount) {
-            dispatchSetPage(pageCount);
+            setPage(pageCount);
         }
         return {
             cardsEachPage,
             pageCount,
         };
-    }, [total, atLeastLarge, dispatchSetPage, page]);
+    }, [total, atLeastLarge, page]);
 
     const { minIndex, maxIndex } = useMemo(() => {
         const minIndex = (page - 1) * cardsEachPage;
@@ -40,7 +30,7 @@ const usePaginatedProjects = () => {
     return {
         page,
         pageCount,
-        setPage: dispatchSetPage,
+        setPage,
         minIndex,
         maxIndex,
     };

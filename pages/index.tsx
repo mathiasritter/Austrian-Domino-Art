@@ -9,16 +9,15 @@ import Container from "@mui/material/Container";
 import { HomeNavBar } from "../components/header/HomeNavBar";
 import { SeoHead } from "../components/head/SeoHead";
 import { GetStaticProps, NextPage } from "next";
-import { initializeStore, InitialReduxStateProps } from "../store";
-import { setProjects, setTotal } from "../components/portfolio/portfolioSlice";
-import { sanityClient, urlFor } from "../lib/sanity";
-import groq from "groq";
 import Box from "@mui/material/Box";
-import { ImageProps } from "../lib/types";
+import { ImageProps, PortfolioProject } from "../lib/types";
 import { getImageProps } from "../lib/images";
 import { ClientLogo, getClientLogos } from "../lib/transformClientLogos";
+import { fetchPortfolioProjects, fetchProjectCount } from "../lib/portfolio";
 
 interface PageProps {
+    projectCount: number;
+    initialProjects: PortfolioProject[];
     backgroundImage: ImageProps;
     aboutImages: {
         card1Image: ImageProps;
@@ -30,6 +29,8 @@ interface PageProps {
 }
 
 const Index: NextPage<PageProps> = ({
+    projectCount,
+    initialProjects,
     backgroundImage,
     aboutImages,
     clientLogos,
@@ -47,7 +48,10 @@ const Index: NextPage<PageProps> = ({
             <Home {...backgroundImage} />
         </section>
         <Section background="default" id="portfolio">
-            <Portfolio />
+            <Portfolio
+                projectCount={projectCount}
+                initialProjects={initialProjects}
+            />
         </Section>
         <Section background="paper" id="services">
             <Services />
@@ -95,44 +99,10 @@ const Section: React.FC<PropsWithChildren<SectionProps>> = ({
     </Box>
 );
 
-const getStaticProps: GetStaticProps<
-    InitialReduxStateProps & PageProps
-> = async () => {
-    const store = initializeStore();
+const getStaticProps: GetStaticProps<PageProps> = async () => {
+    const projectCount = await fetchProjectCount();
 
-    const totalResult = await sanityClient.fetch(groq`
-        *[_type == "portfolio"][0] {
-          "total": count(projects[])
-        }
-    `);
-    const total = totalResult.total;
-    store.dispatch(setTotal(total));
-
-    const projectsResult = await sanityClient.fetch(groq`
-        *[_type == "portfolio"][0] {
-          "projects": projects[0..7]-> {
-            title,
-            "slug": slug.current,
-            summary,
-            thumbnail
-          }
-        }
-    `);
-
-    const projects = await Promise.all(
-        projectsResult.projects.map(async (project) => {
-            const thumbnail = await getImageProps(
-                urlFor(project.thumbnail).url(),
-                `Thumbnail for ${project.title}`
-            );
-            return {
-                ...project,
-                thumbnail,
-            };
-        })
-    );
-
-    store.dispatch(setProjects(projects));
+    const initialProjects = await fetchPortfolioProjects(0, 7);
 
     const backgroundImage = await getImageProps(
         "https://res.cloudinary.com/austriandominoart/image/upload/general/AustrianDominoArt-BG.jpg",
@@ -160,7 +130,8 @@ const getStaticProps: GetStaticProps<
 
     return {
         props: {
-            initialReduxState: store.getState(),
+            projectCount,
+            initialProjects,
             backgroundImage,
             aboutImages: {
                 card1Image,
@@ -170,7 +141,7 @@ const getStaticProps: GetStaticProps<
             clientLogos,
             contactImage,
         },
-        revalidate: 10,
+        revalidate: 5 * 60,
     };
 };
 

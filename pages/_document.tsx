@@ -1,18 +1,14 @@
 import * as React from "react";
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
-import { darkTheme } from "../theme/theme";
 import createEmotionCache from "../lib/createEmotionCache";
+import { getInitColorSchemeScript } from "@mui/material/styles";
 
 export default class MyDocument extends Document {
     render() {
         return (
             <Html lang="en">
                 <Head>
-                    <meta
-                        name="theme-color"
-                        content={darkTheme.palette.primary.main}
-                    />
                     <link
                         rel="stylesheet"
                         type="text/css"
@@ -27,6 +23,7 @@ export default class MyDocument extends Document {
                     {(this.props as any).emotionStyleTags}
                 </Head>
                 <body>
+                    {getInitColorSchemeScript()}
                     <Main />
                     <NextScript />
                 </body>

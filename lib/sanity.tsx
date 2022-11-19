@@ -2,6 +2,7 @@ import React from "react";
 import sanity from "@sanity/client";
 import imageUrlBuilder from "@sanity/image-url";
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import { PortableTextReactComponents } from "@portabletext/react";
 
 const sanityClient = sanity({
     // Find your project ID and dataset in `sanity.json` in your studio project
@@ -19,15 +20,15 @@ const urlFor = (source: SanityImageSource) => {
     return builder.image(source);
 };
 
-const serializers = {
+const serializers: Partial<PortableTextReactComponents> = {
     marks: {
-        internalLink: ({ mark, children }): JSX.Element => {
-            const { slug = {} } = mark;
+        internalLink: ({ value, children }): JSX.Element => {
+            const { slug = {} } = value;
             const href = `/${slug.current}`;
             return <a href={href}>{children}</a>;
         },
-        link: ({ mark, children }): JSX.Element => {
-            const { href } = mark;
+        link: ({ value, children }): JSX.Element => {
+            const { href } = value;
             return (
                 <a href={href} target="_blank" rel="noreferrer noopener">
                     {children}
