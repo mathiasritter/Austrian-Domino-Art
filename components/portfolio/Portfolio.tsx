@@ -38,7 +38,7 @@ const Portfolio: React.FC<PortfolioProps> = ({
             );
         }
         return projects;
-    }, [minIndex, maxIndex]);
+    }, [minIndex, maxIndex, initialProjects]);
 
     const atLeastSm = useMediaQuery((theme: Theme) =>
         theme.breakpoints.up("sm")

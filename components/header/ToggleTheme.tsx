@@ -9,7 +9,7 @@ const ToggleTheme: React.FC = () => {
 
     const toggleTheme = useCallback(() => {
         setMode(mode === "light" ? "dark" : "light");
-    }, [mode]);
+    }, [mode, setMode]);
 
     const icon = useMemo(
         () => (mode === "light" ? <Brightness4Icon /> : <Brightness7Icon />),
