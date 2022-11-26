@@ -6,7 +6,7 @@ const ProjectTitle: React.FC<PropsWithChildren> = ({ children }) => (
         variant="h2"
         component="h1"
         sx={{
-            color: "typography.h1.color",
+            color: "primary.main",
             fontWeight: "bold",
         }}
     >

@@ -12,7 +12,12 @@ interface Props {
 
 const Clients: React.FC<Props> = ({ logos }) => (
     <>
-        <Typography variant="h1">Clients</Typography>
+        <Typography
+            variant="h1"
+            sx={{ color: "primary.main", fontWeight: "bold" }}
+        >
+            Clients
+        </Typography>
         <Box fontStyle="italic">
             <Typography variant="h4" component="div" gutterBottom>
                 &quot;The Austrian Domino Art Team have been amazing: they know

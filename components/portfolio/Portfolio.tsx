@@ -12,18 +12,33 @@ import {
     Typography,
     useMediaQuery,
 } from "@mui/material";
+import { PortfolioProject } from "../../lib/types";
 
-const Portfolio: React.FC = () => {
+interface PortfolioProps {
+    projectCount: number;
+    initialProjects: PortfolioProject[];
+}
+
+const Portfolio: React.FC<PortfolioProps> = ({
+    projectCount,
+    initialProjects,
+}) => {
     const { page, pageCount, setPage, minIndex, maxIndex } =
-        usePaginatedProjects();
+        usePaginatedProjects(projectCount);
 
     const projects = useMemo(() => {
         const projects = [];
         for (let i = minIndex; i < maxIndex; i++) {
-            projects.push(<PortfolioCard key={i} projectIndex={i} />);
+            projects.push(
+                <PortfolioCard
+                    key={i}
+                    projectIndex={i}
+                    initialProject={initialProjects[i]}
+                />
+            );
         }
         return projects;
-    }, [minIndex, maxIndex]);
+    }, [minIndex, maxIndex, initialProjects]);
 
     const atLeastSm = useMediaQuery((theme: Theme) =>
         theme.breakpoints.up("sm")
@@ -45,7 +60,11 @@ const Portfolio: React.FC = () => {
 
     return (
         <>
-            <Typography variant="h1" gutterBottom>
+            <Typography
+                variant="h1"
+                gutterBottom
+                sx={{ color: "primary.main", fontWeight: "bold" }}
+            >
                 Portfolio
             </Typography>
             <SwipeWrapper

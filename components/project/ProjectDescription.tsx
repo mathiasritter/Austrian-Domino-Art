@@ -1,5 +1,4 @@
 import React from "react";
-import BlockContent from "@sanity/block-content-to-react";
 import { Theme } from "../../theme/theme";
 import { serializers } from "../../lib/sanity";
 import {
@@ -9,10 +8,12 @@ import {
     Typography,
     useMediaQuery,
 } from "@mui/material";
+import { PortableText } from "@portabletext/react";
+import { PortableTextBlock } from "@portabletext/types";
 
 interface ProjectDescriptionProps {
     categories: string[];
-    description: string;
+    description: PortableTextBlock;
 }
 
 const ProjectDescription: React.FC<ProjectDescriptionProps> = ({
@@ -59,9 +60,9 @@ const ProjectDescription: React.FC<ProjectDescriptionProps> = ({
                     variant="body1"
                     component="div"
                 >
-                    <BlockContent
-                        blocks={description}
-                        serializers={serializers}
+                    <PortableText
+                        value={description}
+                        components={serializers}
                     />
                 </Typography>
             </CardContent>

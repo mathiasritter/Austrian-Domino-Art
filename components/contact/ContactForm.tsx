@@ -1,150 +1,183 @@
-import { Field, Form, Formik, FormikProps } from "formik";
-import { TextField } from "formik-mui";
-import React from "react";
-import * as Yup from "yup";
+import React, { FormEvent, useCallback } from "react";
 import { RecaptchaField } from "./RecaptchaField";
-import { useAppDispatch } from "../../store";
-import {
-    addNotification,
-    BaseNotification,
-} from "../notification/notificationSlice";
-import { sendContactMessage } from "./contactApi";
+import { z } from "zod";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useSnackbar } from "notistack";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TextField } from "./TextField";
 
-export interface ContactFormValues {
-    name: string;
-    email: string;
-    phone: string;
-    message: string;
-    recaptcha: string;
-}
-
-const ContactFormSchema = Yup.object().shape({
-    name: Yup.string()
+const contactFormSchema = z.object({
+    name: z
+        .string()
+        .min(1, "Please enter your name")
+        .max(50, "Please enter no more than 50 characters"),
+    email: z
+        .string()
+        .min(1, "Please enter your email address")
         .max(60, "Please enter no more than 60 characters")
-        .required("Please enter your name"),
-    email: Yup.string()
-        .max(60)
-        .email("Please enter a valid email address")
-        .required("Please enter no more than 60 characters"),
-    phone: Yup.string().max(30, "Please enter no more than 30 characters"),
-    message: Yup.string()
-        .max(5000, "Please enter no more than 5000 characters")
-        .required("Please enter a message"),
-    recaptcha: Yup.string().required("Please tick the captcha!"),
+        .email("Please enter a valid email address"),
+    phone: z
+        .string()
+        .max(30, "Please enter no more than 30 characters")
+        .optional(),
+    message: z
+        .string()
+        .min(1, "Please enter a message")
+        .max(5000, "Please enter no more than 5000 characters"),
+    recaptcha: z.string().min(1, "Please tick the captcha"),
 });
 
+type ContactFormSchema = z.infer<typeof contactFormSchema>; // string
+
 const ContactForm = () => {
-    const dispatch = useAppDispatch();
+    const { mutateAsync } = useMutation<
+        void,
+        { message: string },
+        ContactFormSchema
+    >({
+        mutationFn: (values) => axios.post("/api/contact", values),
+    });
 
-    const handleSubmit = async (
-        values: ContactFormValues,
-        { setSubmitting, resetForm }
-    ): Promise<void> => {
-        const submissionSuccessful = await sendContactMessage(values);
+    const {
+        handleSubmit,
+        formState: { isSubmitting, isDirty, isValid, isSubmitSuccessful },
+        control,
+        setError,
+    } = useForm<ContactFormSchema>({
+        resolver: zodResolver(contactFormSchema),
+        mode: "onBlur",
+        defaultValues: {
+            name: "",
+            email: "",
+            phone: "",
+            message: "",
+            recaptcha: "",
+        },
+    });
 
-        let notification: BaseNotification;
-        if (submissionSuccessful) {
-            resetForm();
-            notification = {
-                severity: "success",
-                content: "Message sent successfully.",
-            };
-        } else {
-            notification = {
-                severity: "error",
-                content:
-                    "Failed to send message, please try again or send email!",
-            };
+    const setRecaptchaError = useCallback(
+        (error: string) =>
+            setError("recaptcha", { type: "custom", message: error }),
+        [setError]
+    );
+
+    const { enqueueSnackbar } = useSnackbar();
+
+    const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        try {
+            await handleSubmit((data) => mutateAsync(data))(event);
+            enqueueSnackbar("Message sent successfully.", {
+                variant: "success",
+            });
+        } catch (error) {
+            console.error(error);
+            enqueueSnackbar(
+                "Failed to send message, please try again or send email!",
+                { variant: "error", persist: true }
+            );
         }
-
-        dispatch(addNotification(notification));
-        setSubmitting(false);
     };
 
     return (
-        <Formik
-            initialValues={{
-                name: "",
-                email: "",
-                phone: "",
-                message: "",
-                recaptcha: "",
-            }}
-            validationSchema={ContactFormSchema}
-            onSubmit={handleSubmit}
-        >
-            {(props: FormikProps<ContactFormValues>): JSX.Element => (
-                <ContactFormContents {...props} />
-            )}
-        </Formik>
+        <form onSubmit={onSubmit}>
+            <Controller
+                render={({ field, fieldState: { error }, formState }) => (
+                    <TextField
+                        label="Name"
+                        field={field}
+                        fieldError={error}
+                        formState={formState}
+                        required
+                    />
+                )}
+                name="name"
+                control={control}
+            />
+            <Controller
+                render={({ field, fieldState: { error }, formState }) => (
+                    <TextField
+                        label="Email Address"
+                        field={field}
+                        fieldError={error}
+                        formState={formState}
+                        type="email"
+                        required
+                    />
+                )}
+                name="email"
+                control={control}
+            />
+            <Controller
+                render={({ field, fieldState: { error }, formState }) => (
+                    <TextField
+                        label="Phone Number"
+                        field={field}
+                        fieldError={error}
+                        formState={formState}
+                        type="tel"
+                        helperText="Please include the country code"
+                    />
+                )}
+                name="phone"
+                control={control}
+            />
+            <Controller
+                render={({ field, fieldState: { error }, formState }) => (
+                    <TextField
+                        label="Message"
+                        field={field}
+                        fieldError={error}
+                        formState={formState}
+                        required
+                        multiline
+                        rows={10}
+                    />
+                )}
+                name="message"
+                control={control}
+            />
+            <Box marginTop={2} marginBottom={1}>
+                <Controller
+                    render={({
+                        field: { onChange },
+                        fieldState: { error },
+                    }) => (
+                        <RecaptchaField
+                            onChange={onChange}
+                            setError={setRecaptchaError}
+                            error={error?.message}
+                        />
+                    )}
+                    name="recaptcha"
+                    control={control}
+                />
+            </Box>
+            <Box marginTop={2}>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    disabled={
+                        isSubmitting ||
+                        !isDirty ||
+                        !isValid ||
+                        isSubmitSuccessful
+                    }
+                >
+                    {isSubmitting
+                        ? "Submitting..."
+                        : isSubmitSuccessful
+                        ? "Submitted"
+                        : "Submit"}
+                </Button>
+            </Box>
+        </form>
     );
 };
 
-const ContactFormContents = ({
-    errors,
-    isSubmitting,
-    dirty,
-    isValid,
-}: FormikProps<ContactFormValues>) => (
-    <Form>
-        <Field
-            component={TextField}
-            name="name"
-            label="Name"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            required
-        />
-        <Field
-            component={TextField}
-            name="email"
-            label="E-Mail"
-            type="email"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            required
-        />
-        <Field
-            component={TextField}
-            name="phone"
-            label="Phone"
-            type="tel"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            helperText={
-                errors.phone ? errors.phone : "Please include the country code"
-            }
-        />
-        <Field
-            component={TextField}
-            name="message"
-            label="Message"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            required
-            multiline
-            rows={10}
-        />
-        <Box marginTop={2} marginBottom={1}>
-            <Field component={RecaptchaField} name="recaptcha" />
-        </Box>
-        <Box marginTop={2}>
-            <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={isSubmitting || !dirty || !isValid}
-            >
-                {isSubmitting ? "Submitting..." : "Submit"}
-            </Button>
-        </Box>
-    </Form>
-);
-
 export { ContactForm };
+export type { ContactFormSchema };

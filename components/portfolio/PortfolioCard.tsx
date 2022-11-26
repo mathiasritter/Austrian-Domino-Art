@@ -1,10 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Image from "next/future/image";
-import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from "../../store";
 import Link from "next/link";
 import { Theme } from "../../theme/theme";
-import { fetchProject } from "./portfolioSlice";
 import {
     Box,
     Card,
@@ -14,23 +11,28 @@ import {
     Typography,
     useMediaQuery,
 } from "@mui/material";
+import { PortfolioProject } from "../../lib/types";
+import { useQuery } from "@tanstack/react-query";
 
 interface Props {
     projectIndex: number;
+    initialProject?: PortfolioProject;
 }
 
-const PortfolioCard: React.FC<Props> = ({ projectIndex }) => {
-    const project = useSelector(
-        (state: RootState) => state.portfolio.projects[projectIndex]
-    );
-
-    const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        if (!project) {
-            dispatch(fetchProject(projectIndex));
-        }
-    }, [project, projectIndex, dispatch]);
+const PortfolioCard: React.FC<Props> = ({ projectIndex, initialProject }) => {
+    const { data: project } = useQuery<
+        PortfolioProject,
+        unknown,
+        PortfolioProject,
+        [string, number]
+    >({
+        queryKey: ["projects", projectIndex],
+        queryFn: async ({ queryKey: [_, index] }) => {
+            const result = await fetch(`/api/portfolio/${index}`);
+            return result.json();
+        },
+        initialData: initialProject,
+    });
 
     const atLeastSm = useMediaQuery((theme: Theme) =>
         theme.breakpoints.up("sm")

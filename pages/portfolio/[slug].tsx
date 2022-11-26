@@ -12,13 +12,10 @@ import { ProjectDescription } from "../../components/project/ProjectDescription"
 import { ProjectVideos } from "../../components/project/ProjectVideos";
 import { ProjectImageList } from "../../components/project/ProjectImageList";
 import { ProjectTitle } from "../../components/project/ProjectTitle";
-import groq from "groq";
-import { sanityClient, urlFor } from "../../lib/sanity";
-import { FullProject } from "../../components/project/ProjectModel";
 import NotFound from "../404";
 import { styled } from "@mui/system";
-import { initializeStore } from "../../store";
-import { getImageProps } from "../../lib/images";
+import { fetchProjectBySlug, fetchProjectSlugs } from "../../lib/portfolio";
+import { FullProject } from "../../lib/types";
 
 interface Props {
     project: FullProject;
@@ -46,7 +43,7 @@ const Portfolio: NextPage<Props, Props> = ({ project }: Props) => {
                 title={`Austrian Domino Art - ${title}`}
                 description={summary}
                 url={`https://www.domino.art/portfolio/${slug}`}
-                image={thumbnail.src}
+                image={thumbnail}
             />
             <PortfolioNavBar />
             <Section background="default">
@@ -75,58 +72,24 @@ const getStaticProps: GetStaticProps<Props> = async ({
 }: GetStaticPropsContext) => {
     const slug = params.slug as string;
 
-    const project = await sanityClient.fetch(
-        groq`
-            *[_type == "project" && slug.current == $slug][0] {
-                title,
-                "slug": slug.current,
-                summary,
-                "categories": categories[]->name,
-                thumbnail,
-                description,
-                images,
-                videos,
-            }
-        `,
-        { slug }
-    );
+    try {
+        const project = await fetchProjectBySlug(slug);
 
-    if (!project.slug) {
+        return {
+            props: {
+                project,
+            },
+            revalidate: 60 * 60,
+        };
+    } catch (err) {
         return { notFound: true };
     }
-
-    project.thumbnail = await getImageProps(
-        urlFor(project.thumbnail).url(),
-        `Thumbnail for ${project.title}`
-    );
-    project.images = await Promise.all(
-        project.images.map(
-            async (image, index) =>
-                await getImageProps(
-                    urlFor(image).url(),
-                    `Image ${index + 1} of project ${project.title}`
-                )
-        )
-    );
-
-    const store = initializeStore();
-
-    return {
-        props: {
-            initialReduxState: store.getState(),
-            project,
-        },
-        revalidate: 10,
-    };
 };
 
 const getStaticPaths: GetStaticPaths = async () => {
-    const projects = await sanityClient.fetch(
-        groq`*[_type == "project"]{ "slug": slug.current }`
-    );
-    const slugs = projects.map((project) => project.slug);
+    const slugs = await fetchProjectSlugs();
 
-    const paths = slugs.map((slug: string) => ({
+    const paths = slugs.map((slug) => ({
         params: { slug },
     }));
 

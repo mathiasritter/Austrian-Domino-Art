@@ -8,7 +8,12 @@ import { Typography } from "@mui/material";
 
 const Services: React.FC = () => (
     <>
-        <Typography variant="h1">Services</Typography>
+        <Typography
+            variant="h1"
+            sx={{ color: "primary.main", fontWeight: "bold" }}
+        >
+            Services
+        </Typography>
         <Typography variant="h4" component="div" gutterBottom>
             We look forward to working with you on an individual domino project!
         </Typography>

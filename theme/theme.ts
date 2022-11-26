@@ -1,39 +1,45 @@
 import { red, grey } from "@mui/material/colors";
 import {
-    PaletteMode,
-    createTheme as createMuiTheme,
+    experimental_extendTheme as extendTheme,
+    PaletteOptions,
     responsiveFontSizes,
 } from "@mui/material";
 
-const createTheme = (mode: PaletteMode, h1Color: string) =>
-    responsiveFontSizes(
-        createMuiTheme({
-            palette: {
-                primary: {
-                    main: red[900],
-                },
-                secondary: {
-                    main: grey[600],
-                },
-                mode,
-                background: {
-                    default: mode === "light" ? "#fafafa" : "#303030",
-                    paper: mode === "light" ? "#fff" : "#424242",
+const commonPalette: PaletteOptions = {
+    primary: {
+        main: red[900],
+    },
+    secondary: {
+        main: grey[600],
+    },
+};
+
+const theme = responsiveFontSizes(
+    extendTheme({
+        colorSchemes: {
+            light: {
+                palette: {
+                    ...commonPalette,
+                    background: {
+                        default: "#fafafa",
+                        paper: "#fff",
+                    },
                 },
             },
-            typography: {
-                fontSize: 16,
-                h1: {
-                    color: h1Color,
-                    fontWeight: "bold",
+            dark: {
+                palette: {
+                    ...commonPalette,
+                    background: {
+                        default: "#303030",
+                        paper: "#424242",
+                    },
                 },
             },
-        })
-    );
+        },
+    })
+);
 
-const darkTheme = createTheme("dark", red[700]);
-const lightTheme = createTheme("light", red[900]);
+type Theme = typeof theme;
 
-export type Theme = typeof darkTheme;
-
-export { darkTheme, lightTheme };
+export { theme };
+export type { Theme };
