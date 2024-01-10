@@ -30,7 +30,7 @@ const Services: React.FC = () => (
                 description="Fascinate thousands with a continuous domino run that sets new standards: online, on TV and/or with live audience at your event or show."
                 icon={TvIcon}
                 iconSize={125}
-                exampleSlug="el-hormiguero-kloss-skrein"
+                exampleSlug="el-hormiguero-2"
             />
             <ServiceCard
                 name="Workshop"
