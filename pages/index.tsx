@@ -105,27 +105,27 @@ const getStaticProps: GetStaticProps<PageProps> = async () => {
     const initialProjects = await fetchPortfolioProjects(0, 7);
 
     const backgroundImage = await getImageProps(
-        "https://res.cloudinary.com/austriandominoart/image/upload/general/AustrianDominoArt-BG.jpg",
-        "red and white dominoes showing the Austrian Domino Art logo"
+        "https://cdn.sanity.io/images/5su6wo00/production/cfcdc2f14d928d5b849e57b5ffe39b0113033c15-6000x4000.jpg",
+        "Red and white dominoes showing the Austrian Domino Art logo"
     );
     const card1Image = await getImageProps(
-        "https://res.cloudinary.com/austriandominoart/image/upload/general/Dominoes-Structures.jpg",
+        "https://cdn.sanity.io/images/5su6wo00/production/f6879d6978231298f50b46b822827b8a6ed444b8-4032x2268.jpg",
         "Various domino structures on a table"
     );
     const card2Image = await getImageProps(
-        "https://res.cloudinary.com/austriandominoart/image/upload/general/Dominoes-Pile.jpg",
+        "https://cdn.sanity.io/images/5su6wo00/production/6fffd724820ee3c5ca1b27b80ae4a6704a6903fd-1920x1080.png",
         "A pile of white and golden dominoes"
     );
     const card3Image = await getImageProps(
-        "https://res.cloudinary.com/austriandominoart/image/upload/general/Dominoes-Dog.jpg",
+        "https://cdn.sanity.io/images/5su6wo00/production/6fffd724820ee3c5ca1b27b80ae4a6704a6903fd-1920x1080.png",
         "A dog who watches dominoes toppling"
     );
 
     const clientLogos = await getClientLogos();
 
     const contactImage = await getImageProps(
-        "https://res.cloudinary.com/austriandominoart/image/upload/general/Dominoes-Walls.jpg",
-        "Multiple colourful domino walls on a prop"
+        "https://cdn.sanity.io/images/5su6wo00/production/6f1b5eb0bb00b9551b5ee608e1839a41628142bf-4490x3456.jpg",
+        "Domino setup for basketball EuroLeague Final Four tournament"
     );
 
     return {
