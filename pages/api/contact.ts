@@ -8,7 +8,7 @@ if (!(process.env.EMAIL_PASSWORD && process.env.RECAPTCHA_SECRET_KEY)) {
 }
 
 const mailSender = nodemailer.createTransport({
-    host: "smtprelaypool.ispgateway.de",
+    host: "sslout.df.eu",
     port: 465,
     secure: true,
     auth: {
@@ -34,7 +34,8 @@ const requestHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
 
         const mailOptions = {
-            from: data.email,
+            from: "contact@domino.art",
+            replyTo: data.email,
             to: "mail@domino.art",
             subject: "Austrian Domino Art Inquiry",
             text: `Name: ${data.name}\nPhone: ${data.phone || "n/a"}\n\n${
